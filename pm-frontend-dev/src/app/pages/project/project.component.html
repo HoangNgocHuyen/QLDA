@@ -1,0 +1,124 @@
+<div class="card card-custom mb-3">
+    <form [formGroup]="searchFrom" (ngSubmit)="loadPage()">
+        <div class="card-body row pt-3">
+            <div class="form-group col-sm-6 row p-0 m-0 pt-5">
+                <label class="form-control-label text-sm-right col-sm-4 pl-0 pt-2">Mã dự án</label>
+                <div class="col-sm-8 pr-0 pl-0">
+                    <input type="text" class="form-control" formControlName="code"/>
+                </div>
+            </div>
+            <div class="form-group col-sm-6 row p-0 m-0 pt-5">
+                <label class="form-control-label text-sm-right col-sm-4 pl-0 pt-2">Tên dự án</label>
+                <div class="col-sm-8 pr-0 pl-0">
+                    <input type="text" class="form-control" formControlName="name"/>
+                </div>
+            </div>
+            <div class="form-group col-sm-6 row p-0 m-0 pt-5">
+                <label class="form-control-label text-sm-right col-sm-4 pl-0 pt-2">Ngày bắt đầu</label>
+                <div class="col-sm-8 pr-0 pl-0 input-group">
+                    <input class="form-control"
+                           formControlName="startDate"
+                           [matDatepicker]="sPicker"
+                           (click)="sPicker.open()"
+                           (dateChange)="searchFrom.patchValue({startDate: searchFrom.get('startDate').value})"
+                    />
+                    <div class="input-group-prepend sb-cursor-pointer">
+                        <span class="input-group-text p-2 sb-radius-right" (click)="sPicker.open()">
+                            <i class="fa fa-calendar"></i>
+                        </span>
+                        <mat-datepicker #sPicker color="warn"></mat-datepicker>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-sm-6 row p-0 m-0 pt-5">
+                <label class="form-control-label text-sm-right col-sm-4 pl-0 pt-2">Ngày kết thúc</label>
+                <div class="col-sm-8 pr-0 pl-0 input-group">
+                    <input class="form-control"
+                           formControlName="endDate"
+                           [matDatepicker]="ePicker"
+                           (click)="ePicker.open()"
+                           (dateChange)="searchFrom.patchValue({endDate: searchFrom.get('endDate').value})"
+                    />
+                    <div class="input-group-prepend sb-cursor-pointer">
+                        <span class="input-group-text p-2 sb-radius-right" (click)="ePicker.open()">
+                            <i class="fa fa-calendar"></i>
+                        </span>
+                        <mat-datepicker #ePicker color="warn"></mat-datepicker>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-sm-12 p-0 m-0 pt-5 text-right">
+                <button mat-raised-button color="primary" type="submit">
+                    <span><i class="fas fa-search mr-2 text-light"></i>{{'BUTTON.SEARCH' | translate}}</span>
+                </button>
+                <button style="margin-left: 10px" mat-raised-button color="warn" type="button" class="mr-2"
+                        *cmActionAnyPermission="['ROLE_LEADER_SPECIAL', 'ROLE_LEADER']"
+                        [routerLink]="['/project', 'new']">
+                    <span><i class="fas fa-plus-circle mr-2 text-light"></i>{{'BUTTON.ADD' | translate}}</span>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="card card-custom mt-3 gutter-b example example-compact">
+    <div class="card-header">
+        <div class="card-title">
+            <h3 class="card-label">Danh sách dự án</h3>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" matSort (matSortChange)="sortData($event)">
+                <thead>
+                <tr>
+                    <th class="text-center" scope="col"></th>
+                    <th class="text-center" scope="col">Mã dự án</th>
+                    <th class="text-center" scope="col" mat-sort-header="name">Tên dự án</th>
+                    <th class="text-center" scope="col">PMO</th>
+                    <th class="text-center" scope="col">Đơn vị</th>
+                    <th class="text-center" scope="col">Ngày bắt đầu</th>
+                    <th class="text-center" scope="col">Ngày kết thúc</th>
+                    <th class="text-center" scope="col">Trạng thái</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let project of projects | async">
+                    <td class="text-right">
+                        <div class="btn-group btn-group-sm">
+                            <button type="button" class="btn btn-info" data-toggle="tooltip" title="Chi tiết"
+                                    [routerLink]="['/project', project.id, 'view']">
+                                <i class="fa fa-eye"></i>
+                            </button>
+                            <button type="button" class="btn btn-primary" data-toggle="tooltip" title="Chỉnh sửa"
+                                    *cmActionAnyPermission="['ROLE_LEADER_SPECIAL', 'ROLE_LEADER', 'ROLE_EMPLOYEE_SPECIAL']"
+                                    [routerLink]="['/project', 'edit']"
+                                    [queryParams]="{id: project.id, code: project.code}">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                            <button type="button" class="btn btn-success"  data-toggle="tooltip" title="Xem mục tiêu"
+                                    [routerLink]="['/target']" [queryParams]="{projectCode: project.code, projectName: project.name}">
+                                <i class="fa fa-plus"></i>
+                            </button>
+                        </div>
+                    </td>
+                    <td class="text-center">{{ project.code }}</td>
+                    <td>{{ project.name }}</td>
+                    <td>{{ project.pmoName }}</td>
+                    <td>{{ project.unit }}</td>
+                    <td>{{ project.startDate | date: 'dd/MM/yyyy'}}</td>
+                    <td>{{ project.endDate  | date: 'dd/MM/yyyy'}}</td>
+                    <td>{{ project.status }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <mat-paginator [pageSizeOptions]="pageOptions"
+                       [pageSize]="this.pageable.size"
+                       [pageIndex]="this.pageable.page"
+                       [length]="this.total | async"
+                       (page)="onChangePage($event)"
+                       showFirstLastButtons="true">
+        </mat-paginator>
+    </div>
+</div>

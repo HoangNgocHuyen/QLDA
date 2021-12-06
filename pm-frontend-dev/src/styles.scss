@@ -1,0 +1,349 @@
+/* You can add global styles to this file, and also import other style files */
+//@import url("https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700|Roboto:300,400,500,600,700");
+// Global vendors
+@import "~bootstrap/dist/css/bootstrap.css";
+// => Material
+//@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
+
+@import "~highlight.js/styles/googlecode.css";
+@import "~perfect-scrollbar/css/perfect-scrollbar.css";
+
+@import "src/variable.scss";
+
+// Global fonts
+@import "~socicon/css/socicon.css";
+@import "~@fortawesome/fontawesome-free/css/all.min.css";
+@import "./assets/plugins/flaticon/flaticon.css";
+@import "./assets/plugins/flaticon2/flaticon.css";
+@import "./assets/plugins/keenthemes-icons/font/ki.css";
+
+// Metronic styles (replace these path when using RTL css below)
+@import "./assets/sass/style.angular.scss";
+
+// For RTL, check this documentation https://keenthemes.com/metronic/?page=docs&section=angular-rtl
+// @import "./assets/sass/style.angular.rtl.css";
+
+// Default Layout themes
+@import "./assets/sass/themes/layout/header/base/light.scss";
+@import "./assets/sass/themes/layout/header/menu/light.scss";
+@import "./assets/sass/themes/layout/brand/dark.scss";
+@import "./assets/sass/themes/layout/aside/dark.scss";
+
+
+/* montserrat-regular - vietnamese */
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 400;
+  src: url('/assets/fonts/montserrat-v15-vietnamese-regular.eot'); /* IE9 Compat Modes */
+  src: local('Montserrat Regular'), local('Montserrat-Regular'),
+  url('/assets/fonts/montserrat-v15-vietnamese-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('/assets/fonts/montserrat-v15-vietnamese-regular.woff2') format('woff2'), /* Super Modern Browsers */
+  url('/assets/fonts/montserrat-v15-vietnamese-regular.woff') format('woff'), /* Modern Browsers */
+  url('/assets/fonts/montserrat-v15-vietnamese-regular.ttf') format('truetype'), /* Safari, Android, iOS */
+  url('/assets/fonts/montserrat-v15-vietnamese-regular.svg#Montserrat') format('svg'); /* Legacy iOS */
+}
+
+// Header themes
+// .header-base-light {
+//     @import "./assets/sass/themes/layout/header/base/light.scss";
+// }
+
+// .header-base-dark {
+//     @import "./assets/sass/themes/layout/header/base/dark.scss";
+// }
+
+// Header Menu themes
+// .header-menu-light {
+//     @import "./assets/sass/themes/layout/header/menu/light.scss";
+// }
+// .header-menu-dark {
+//     @import "./assets/sass/themes/layout/header/menu/dark.scss";
+// }
+
+// Brand themes
+.brand-dark {
+  @import "./assets/sass/themes/layout/brand/dark.scss";
+}
+
+.brand-light {
+  @import "./assets/sass/themes/layout/brand/light.scss";
+}
+
+// Aside themes
+// .aside-dark {
+//   @import "./assets/sass/themes/layout/aside/dark.scss";
+// }
+
+// .aside-light {
+//   @import "./assets/sass/themes/layout/aside/light.scss";
+// }
+
+// hide bootstrap dropdown arrow globally
+.dropdown-toggle::after {
+  display: none !important;
+}
+
+.wrapper {
+  background-image: $sb-background-url;
+  background-size: cover;
+  height: 100vh;
+}
+
+.login {
+  background-image: url(assets/media/bg/demo-7.jpg);
+  background-size: cover;
+  height: 100vh;
+}
+
+.login-aside {
+  background-image: url(assets/media/bg/demo-7.jpg);
+  background-size: cover;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.table th, .table td {
+  vertical-align: middle !important;
+}
+
+.card-footer {
+  padding: 0.75rem 1.25rem !important;
+}
+
+/* Importing Bootstrap SCSS file. */
+@import '~bootstrap/scss/bootstrap';
+
+.form-control:disabled, .form-control[readonly] {
+  background-color: #ffffff !important;
+  opacity: 1;
+}
+
+.btn-input-group {
+  //color: #3F4254;
+  background-color: #ffffffff;
+  border-color: #d7dae7;
+  border-bottom-right-radius: 5px !important;
+  border-top-right-radius: 5px !important;
+}
+
+.sb-color-red {
+  color: $sb-color !important;
+}
+
+.fix-modal-content {
+  border: 0 !important;
+  border-radius: $sb-modal-border-radius !important;
+
+  .fix-modal-header {
+    border-top-right-radius: $sb-modal-border-radius !important;
+    border-top-left-radius: $sb-modal-border-radius !important;
+    padding: 15px 30px !important;
+  }
+
+  .fix-modal-body {
+    border: $sb-modal-border-color;
+    padding: 15px 30px;
+  }
+
+  .fix-modal-footer {
+    padding: 15px 30px !important;
+  }
+
+  .fix-title {
+    width: 100%;
+    text-align: center !important;
+    color: $sb-color-text !important;
+  }
+
+  .fix-color {
+    color: #bababa !important;
+  }
+
+  .fix-close {
+    color: $sb-color !important;
+    padding: 0;
+    background-color: transparent;
+    border: 0;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+  }
+
+  .fix-close span {
+    font-weight: bolder;
+  }
+
+  .fix-close:hover {
+    text-shadow: 0 0 5px #fff;
+  }
+
+  .fix-close:disabled {
+    color: #bfb6b6 !important;
+    cursor: auto;
+    text-shadow: 0 0 0 #fff;
+  }
+
+  @media (max-width: 769px) {
+    .fix-modal-body {
+      padding: 15px 15px;
+    }
+  }
+
+  .fix-modal-footer {
+    padding: 15px 15px !important;
+  }
+}
+
+.sb-label {
+  color: black !important;
+  padding-top: 7px;
+}
+
+.sb-error {
+  width: 100% !important;
+  margin-top: 0.25rem !important;
+  font-size: 90% !important;
+  color: $sb-invalid-feedback !important;
+}
+
+.ng-select .ng-spinner-loader {
+  border-left: $sb-color 2px solid !important;
+}
+
+
+.sb-select-lang {
+  border-radius: 50% !important;
+  -moz-border-radius: 50% !important;
+  -webkit-border-radius: 50% !important;
+  border: 2px solid white;
+  height: 30px;
+  width: 30px;
+}
+
+.text-label-padding-top {
+  padding-top: 7px !important;
+}
+
+.sb-cursor-pointer {
+  cursor: pointer !important;
+}
+
+.brand-dark .brand {
+  background-color: transparent !important;
+}
+
+.brand-dark .header-mobile {
+  background-color: transparent !important;
+  background-image: url(assets/media/bg/demo-7.jpg) !important;
+  background-size: cover;
+}
+
+.header-mobile {
+  background-color: transparent !important;
+  background-image: url(assets/media/bg/demo-7.jpg) !important;
+  background-size: cover;
+}
+
+.aside {
+  background-image: url(assets/media/bg/demo-7.jpg) !important;
+  background-size: cover;
+}
+
+.aside-menu {
+  background-color: transparent !important;
+}
+
+.aside-menu .menu-nav > .menu-item > .menu-heading .menu-text, .aside-menu .menu-nav > .menu-item > .menu-link .menu-text {
+  color: white !important;
+}
+
+.brand-dark .header-mobile .burger-icon span, .brand-dark .header-mobile .burger-icon span::before, .brand-dark .header-mobile .burger-icon span::after {
+  background-color: white !important;
+}
+
+.brand-dark .header-mobile .btn .svg-icon svg g [fill] {
+  fill: white !important;
+}
+
+.aside-menu .menu-nav > .menu-item:not(.menu-item-parent):not(.menu-item-open):not(.menu-item-here):not(.menu-item-active):hover > .menu-heading, .aside-menu .menu-nav > .menu-item:not(.menu-item-parent):not(.menu-item-open):not(.menu-item-here):not(.menu-item-active):hover > .menu-link {
+  background-color: #ffffff42 !important;
+}
+
+.aside-menu .menu-nav > .menu-item.menu-item-active > .menu-heading, .aside-menu .menu-nav > .menu-item.menu-item-active > .menu-link {
+  background-color: #ffffff42 !important;
+}
+
+.aside-menu .menu-nav > .menu-item.menu-item-open > .menu-heading, .aside-menu .menu-nav > .menu-item.menu-item-open > .menu-link {
+  background-color: #ffffff42 !important;
+}
+
+.aside-menu .menu-nav > .menu-item .menu-submenu .menu-item.menu-item-active > .menu-heading, .aside-menu .menu-nav > .menu-item .menu-submenu .menu-item.menu-item-active > .menu-link {
+  background-color: #ffffff24 !important;
+}
+
+.aside-menu .menu-nav > .menu-item .menu-submenu .menu-item:not(.menu-item-parent):not(.menu-item-open):not(.menu-item-here):not(.menu-item-active):hover {
+  transition: background-color 0.1s !important;
+}
+
+.container {
+  margin: 0 !important;
+  max-width: inherit !important;
+}
+
+.ng-select.ng-select-focused:not(.ng-select-opened) > .ng-select-container {
+  border-color: #3699ff !important;
+  box-shadow: none !important;
+}
+
+.error-msg {
+  color: #ff4b46 !important;
+}
+
+.time-frame {
+  padding-top: inherit !important;
+}
+
+.pm-form-control {
+  display: block !important;
+  width: 100% !important;
+  height: calc(1.5em + 1.3rem + 2px) !important;
+  padding: 0.65rem 1rem !important;
+  font-size: 1rem !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+  color: #3F4254 !important;
+  background-color: #ffffff !important;
+  background-clip: padding-box !important;
+  border: 1px solid #E4E6EF !important;
+  border-radius: 0.42rem !important;
+  box-shadow: none !important;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out !important;
+}
+
+.pm-form-control:focus {
+  color: #3F4254;
+  background-color: #ffffff;
+  border-color: #69b3ff;
+  outline: 0;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px !important;
+}
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1 !important;
+}
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888 !important;
+}
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555 !important;
+}

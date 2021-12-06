@@ -1,0 +1,11 @@
+<table class="table table-borderless p-0 m-0">
+    <tr *ngFor="let path of files" class="p-0" style="border-bottom: 1px solid #EBEDF3">
+        <td class="p-0"><a [href]="baseUrl + path" target="_blank">{{getFileName(path)}}</a></td>
+        <td style="width: 1%" class="p-0" *ngIf="disable !== true">
+            <button type="button" mat-icon-button matTooltip="{{'BUTTON.DELETE' | translate}}"
+                    matTooltipPosition="above" (click)="deleteFile(path)">
+                <i class="fas fa-times sb-color-red"></i>
+            </button>
+        </td>
+    </tr>
+</table>

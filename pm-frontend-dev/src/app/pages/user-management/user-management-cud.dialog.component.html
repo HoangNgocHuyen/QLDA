@@ -1,0 +1,125 @@
+<div class="card card-custom">
+    <div class="card-header">
+        <div class="card-title">
+            <h3 class="card-label" *ngIf="!user.id">Thêm mới tài khoản</h3>
+            <h3 class="card-label" *ngIf="user.id">Cập nhật tài khoản</h3>
+        </div>
+    </div>
+    <form class="form" [formGroup]="editForm" (ngSubmit)="save()">
+        <div class="card-body row">
+            <div class="form-group col-sm-6">
+                <label class="form-control-label" for="login">Tên đăng nhập(*)</label>
+                <input type="text" class="form-control" id="login" formControlName="login"
+                       placeholder="Nhập mã tài khoản" trimSpaceBeginEnd [readOnly]="editForm.value.id"/>
+                <div class="error-msg" *ngIf="frm.login.invalid && (frm.login.dirty || frm.login.touched)">
+                    <span *ngIf="frm.login.errors.required">Trường thông tin bắt buộc nhập <br/></span>
+                    <span *ngIf="frm.login.errors.maxlength">Trường thông tin không vượt quá 50 ký tự <br/></span>
+                    <span *ngIf="frm.login.errors.pattern">Trường thông tin chỉ chứa các chữ, các số và dấu '.', không chứ ký tự đặc biệt</span>
+                </div>
+            </div>
+
+            <div class="form-group col-sm-6">
+                <label class="form-control-label" for="fullName">Họ và tên(*)</label>
+                <input type="text" class="form-control" id="fullName" trimSpaceBeginEnd
+                       placeholder="Nhập tên tài khoản" formControlName="fullName"/>
+                <div class="error-msg" *ngIf="frm.fullName.invalid && (frm.fullName.dirty || frm.fullName.touched)">
+                    <span *ngIf="frm.fullName.errors.required">Trường thông tin bắt buộc nhập <br/></span>
+                    <span *ngIf="frm.fullName.errors.maxlength">Trường thông tin không vượt quá 50 ký tự</span>
+                </div>
+            </div>
+
+            <div class="form-group col-sm-6">
+                <label class="form-control-label" for="email">Email(*)</label>
+                <input type="text" class="form-control" id="email" trimSpaceBeginEnd
+                       placeholder="Nhập email" formControlName="email"/>
+                <div class="error-msg" *ngIf="frm.email.invalid && (frm.email.dirty || frm.email.touched)">
+                    <span *ngIf="frm.email.errors.required">Trường thông tin bắt buộc nhập <br/></span>
+                    <span *ngIf="frm.email.errors.maxlength">Trường thông tin không vượt quá 50 ký tự <br/></span>
+                    <span *ngIf="frm.email.errors.email">Email không chính xác</span>
+                </div>
+            </div>
+
+            <div class="form-group col-sm-6">
+                <label class="form-control-label" for="mobile">Số điện thoại(*)</label>
+                <input type="text" class="form-control" id="mobile" trimSpaceBeginEnd
+                       placeholder="Nhập số điện thoại" formControlName="mobile"/>
+                <div class="error-msg" *ngIf="frm.mobile.invalid && (frm.mobile.dirty || frm.mobile.touched)">
+                    <span *ngIf="frm.mobile.errors.required">Trường thông tin bắt buộc nhập <br/></span>
+                    <span *ngIf="frm.mobile.errors.minlength">Trường thông tin có ít nhất 9 ký tự <br/></span>
+                    <span *ngIf="frm.mobile.errors.maxlength">Trường thông tin không vượt quá 10 ký tự <br/></span>
+                    <span *ngIf="frm.mobile.errors.pattern">Số điện thoại không đúng</span>
+                </div>
+            </div>
+
+            <div class="form-group col-sm-6">
+                <label class="form-control-label" for="position">Chức vụ</label>
+                <ng-select formControlName="position" id="position"
+                           [items]="(positions | async)"
+                           placeholder="Chọn chức vụ"
+                           bindValue="position"
+                           [clearable]="false"
+                           [readonly]="userIdentity?.login !== 'admin' && user?.position === 'ADMIN'"
+                           (close)="position.focus(); position.blur()" #position>
+                    <ng-template ng-label-tmp let-item="item">
+                        {{item.desc | translate}}
+                    </ng-template>
+                    <ng-template ng-option-tmp let-item="item">
+                        {{item.desc | translate}}
+                    </ng-template>
+                </ng-select>
+                <div class="error-msg" *ngIf="frm.position.invalid && (frm.position.dirty || frm.position.touched)">
+                    <span *ngIf="frm.position.errors.required">Trường thông tin bắt buộc chọn</span>
+                </div>
+            </div>
+
+            <div class="form-group col-sm-6" *ngIf="!userIdentity?.unitCode || userIdentity?.unitCode === unitCodeSpecial">
+                <label class="form-control-label" for="unitCode">Đơn vị</label>
+                <ng-select formControlName="unitCode" id="unitCode"
+                           [items]="units | async"
+                           placeholder="Chọn đơn vị"
+                           bindValue="unitCode"
+                           [clearable]="false"
+                           (close)="unitCode.focus(); unitCode.blur()" #unitCode>
+                    <ng-template ng-label-tmp let-item="item">
+                        {{item.unitName}}
+                    </ng-template>
+                    <ng-template ng-option-tmp let-item="item">
+                        {{item.unitName}}
+                    </ng-template>
+                </ng-select>
+                <div class="error-msg" *ngIf="frm.unitCode.invalid && (frm.unitCode.dirty || frm.unitCode.touched)">
+                    <span *ngIf="frm.unitCode.errors.required">Trường thông tin bắt buộc chọn</span>
+                </div>
+            </div>
+
+            <div class="form-group col-sm-6">
+                <label class="form-control-label" for="activated">Trạng thái</label>
+                <ng-select formControlName="activated" id="activated"
+                           [items]="status | async"
+                           placeholder="Chọn trạng thái"
+                           bindValue="activated"
+                           [clearable]="false"
+                           [readonly]="userIdentity?.login !== 'admin' && user?.position === 'ADMIN'"
+                           (close)="activated.focus(); activated.blur()" #activated>
+                    <ng-template ng-label-tmp let-item="item">
+                        {{item.desc | translate}}
+                    </ng-template>
+                    <ng-template ng-option-tmp let-item="item">
+                        {{item.desc | translate}}
+                    </ng-template>
+                </ng-select>
+            </div>
+
+        </div>
+        <div class="card-footer text-right">
+            <button mat-raised-button type="button" class="mr-2"
+                    (click)="dialogRef.close(false)">
+                <span>{{'BUTTON.CANCEL' | translate}}</span>
+            </button>
+            <button mat-raised-button color="primary" type="submit"
+                    [disabled]="editForm.invalid || (isProcessing | async)">
+                <span>{{'BUTTON.APPROVE' | translate}}</span>
+            </button>
+        </div>
+    </form>
+</div>

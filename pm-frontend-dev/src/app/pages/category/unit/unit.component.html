@@ -1,0 +1,75 @@
+<div class="card card-custom mb-3">
+    <form [formGroup]="searchForm" (ngSubmit)="searchUnits(true)">
+        <div class="card-body row pt-3">
+            <div class="form-group col-sm-4 row p-0 m-0 pt-5">
+                <label class="form-control-label text-sm-right col-sm-4 pl-0 pt-2" for="unitCode">Mã đơn vị</label>
+                <div class="col-sm-8 pr-0 pl-0">
+                    <input type="text" class="form-control text-uppercase" id="unitCode" trimSpaceBeginEnd
+                           placeholder="Nhập mã đơn vị" formControlName="unitCode"/>
+                </div>
+            </div>
+
+            <div class="form-group col-sm-4 row p-0 m-0 pt-5">
+                <label class="form-control-label text-sm-right col-sm-4 pl-0 pt-2" for="unitName">Tên đơn vị</label>
+                <div class="col-sm-8 pr-0 pl-0">
+                    <input type="text" class="form-control" id="unitName" trimSpaceBeginEnd
+                           placeholder="Nhập tên đơn vị" formControlName="unitName"/>
+                </div>
+            </div>
+
+            <div class="form-group col-sm-4 p-0 m-0 pt-5 text-right">
+                <button mat-raised-button color="primary" type="submit" [disabled]="processingSearch | async">
+                    <span><i class="fas fa-search mr-2 text-light"></i>{{'BUTTON.SEARCH' | translate}}</span>
+                </button>
+                <button style="margin-left: 10px" mat-raised-button color="warn" type="button"
+                        *ngIf="userAuthorities === roleEnums.ROLE_ADMIN && (!userIdentity.unitCode || userIdentity.unitCode === unitCodeSpecial)"
+                        (click)="createOrUpdate({}, 'CREATED')">
+                    <span><i class="fas fa-plus-circle mr-2 text-light"></i>{{'BUTTON.ADD' | translate}}</span>
+                </button>
+            </div>
+
+        </div>
+    </form>
+</div>
+<div class="card card-custom mb-3">
+    <div class="form-group justify-content-md-around px-6 pt-10 table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead>
+            <tr>
+                <th style="width: 1%;">STT</th>
+                <th>Mã đơn vị</th>
+                <th>Tên đơn vị</th>
+                <th style="width: 10%;"
+                    *ngIf="userAuthorities === roleEnums.ROLE_ADMIN && (!userIdentity.unitCode || userIdentity.unitCode === unitCodeSpecial)">
+                    Thao tác
+                </th>
+            </tr>
+            </thead>
+            <tbody *ngIf="(units | async).length > 0">
+            <tr *ngFor="let unit of (units | async); let i = index">
+                <td>{{(pageIndex * pageSize) + i + 1}}</td>
+                <td>{{unit.unitCode}}</td>
+                <td>{{unit.unitName}}</td>
+                <td *ngIf="userAuthorities === roleEnums.ROLE_ADMIN && (!userIdentity.unitCode || userIdentity.unitCode === unitCodeSpecial)">
+                    <button mat-mini-fab color="primary" matTooltip="{{'BUTTON.EDIT' | translate}}"
+                            matTooltipPosition="above" class="mr-2" (click)="createOrUpdate(unit, 'UPDATED')">
+                        <i class="fas fa-edit text-light"></i>
+                    </button>
+                    <button mat-mini-fab color="warn" matTooltip="{{'BUTTON.DELETE' | translate}}"
+                            matTooltipPosition="above" (click)="deleteUnit(unit)">
+                        <i class="fas fa-trash text-light"></i>
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="text-center" *ngIf="(units | async).length <= 0 && !(processingSearch | async)">
+            <span class="font-weight-bold">{{'unit_management.message.not_found_data' | translate}}</span>
+        </div>
+    </div>
+    <mat-paginator [pageIndex]="pageIndex"
+                   [pageSize]="pageSize"
+                   [length]="totalElement"
+                   [pageSizeOptions]="pageOptions"
+                   (page)="pageChange($event)"></mat-paginator>
+</div>

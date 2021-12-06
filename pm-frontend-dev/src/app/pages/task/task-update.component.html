@@ -1,0 +1,562 @@
+<div class="card card-custom">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+        <div class="card-header">
+            <div class="card-title mb-0 pb-0">
+                <h4 class="card-label mb-0 pb-0" *ngIf="!task.id">Tạo mới công việc</h4>
+                <h4 class="card-label mb-0 pb-0" *ngIf="task.id">Cập nhật công việc</h4>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="form-group border p-5">
+                <div class="form-group">
+                    <h5 class="font-weight-bold">Thông tin công việc</h5>
+                </div>
+                <div class="row">
+                    <div class="form-group col-sm-6 row">
+                        <label class="form-control-label text-label-padding-top col-md-3" for="projectCode">Mã dự
+                            án</label>
+                        <div class="col-md-9">
+                            <ng-select formControlName="projectCode" id="projectCode"
+                                       [items]="projects | async"
+                                       placeholder="---Chọn dự án---"
+                                       bindValue="code"
+                                       bindLabel="name"
+                                       [readonly]="task.id"
+                                       [clearable]="false"
+                                       (close)="projectCode.focus(); projectCode.blur()" #projectCode>
+                            </ng-select>
+                            <div class="error-msg"
+                                 *ngIf="frm.projectCode.invalid && (frm.projectCode.dirty || frm.projectCode.touched)">
+                                <span *ngIf="frm.projectCode.errors.required">{{'message.required' | translate}}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6 row">
+                        <label class="form-control-label text-label-padding-top col-md-3" for="targetCode">Mã mục
+                            tiêu</label>
+                        <div class="col-md-9">
+                            <ng-select formControlName="targetCode" id="targetCode"
+                                       [items]="targets | async"
+                                       placeholder="---Chọn mục tiêu---"
+                                       bindValue="code"
+                                       bindLabel="title"
+                                       [clearable]="false"
+                                       [readonly]="task.id || !frm.projectCode.value"
+                                       (close)="targetCode.focus(); targetCode.blur()" #targetCode>
+                            </ng-select>
+                            <div class="error-msg"
+                                 *ngIf="frm.targetCode.invalid && (frm.targetCode.dirty || frm.targetCode.touched)">
+                                <span *ngIf="frm.targetCode.errors.required">{{'message.required' | translate}}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6 row">
+                        <label class="form-control-label text-label-padding-top col-md-3" for="type">Loại công
+                            việc</label>
+                        <div class="col-md-9">
+                            <ng-select formControlName="type" id="type"
+                                       [items]="service.type"
+                                       bindValue="type"
+                                       bindLabel="desc"
+                                       [clearable]="false"
+                                       [readonly]="task.id"
+                                       (close)="type.focus(); type.blur()" #type>
+                            </ng-select>
+                            <div class="error-msg"
+                                 *ngIf="frm.type.invalid && (frm.type.dirty || frm.type.touched)">
+                                <span *ngIf="frm.type.errors.required">{{'message.required' | translate}}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6 row">
+                        <label class="form-control-label text-label-padding-top col-md-3" for="taskParentCode">Mã công
+                            việc cha</label>
+                        <div class="col-md-9">
+                            <ng-select formControlName="taskParentCode" id="taskParentCode"
+                                       [items]="taskParents | async"
+                                       placeholder="---Chọn công việc---"
+                                       bindValue="code"
+                                       bindLabel="name"
+                                       [readonly]="!frm.projectCode.value || !frm.targetCode.value"
+                                       (close)="taskParentCode.focus(); taskParentCode.blur()" #taskParentCode>
+                            </ng-select>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6 row">
+                        <label class="form-control-label text-label-padding-top col-md-3" for="code">Mã công
+                            việc</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" formControlName="code" id="code"
+                                   placeholder="Nhập mã công việc" [readOnly]="task.id" trimSpaceBeginEnd/>
+                            <div class="error-msg"
+                                 *ngIf="frm.code.invalid && (frm.code.dirty || frm.code.touched)">
+                                <span *ngIf="frm.code.errors.required">{{'message.required' | translate}} <br/></span>
+                                <span *ngIf="frm.code.errors.maxlength">{{'message.maxLength_error' | translate:{maxlength: 255} }}
+                                    <br/></span>
+                                <span *ngIf="frm.code.errors.pattern">Trường thông tin chỉ chứa các chữ, các số, ký tự đặc biệt _</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6 row">
+                        <label class="form-control-label text-label-padding-top col-md-3" for="name">Tên công
+                            việc</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" formControlName="name" id="name"
+                                   placeholder="Nhập tên công việc" trimSpaceBeginEnd/>
+                            <div class="error-msg"
+                                 *ngIf="frm.name.invalid && (frm.name.dirty || frm.name.touched)">
+                                <span *ngIf="frm.name.errors.required">{{'message.required' | translate}} <br/></span>
+                                <span *ngIf="frm.name.errors.maxlength">{{'message.maxLength_error' | translate:{maxlength: 255} }}
+                                    <br/></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6 row" *ngIf="frm.type.value === 'WORK'">
+                        <label class="form-control-label text-label-padding-top col-md-3" for="startDate">Ngày bắt
+                            đầu</label>
+                        <div class="col-md-9">
+                            <div class="input-group">
+                                <input class="form-control" id="startDate" formControlName="startDate"
+                                       aria-describedby="basic-addon2"
+                                       [matDatepicker]="startDate"
+                                       (click)="startDate.open()"
+                                       (dateChange)="editForm.patchValue({startDate: editForm.get('startDate').value})"
+                                       placeholder="Chọn ngày bắt đầu" readonly>
+                                <div class="input-group-prepend sb-cursor-pointer" (click)="startDate.open()">
+                                    <span class="input-group-text"><i class="flaticon2-calendar-1"></i></span>
+                                </div>
+                                <mat-datepicker #startDate color="warn"></mat-datepicker>
+                            </div>
+                            <div class="error-msg"
+                                 *ngIf="frm.startDate.invalid && (frm.startDate.dirty || frm.startDate.touched)">
+                                <span *ngIf="frm.startDate.errors.required">{{'message.required' | translate}}
+                                    <br/></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6 row" *ngIf="frm.type.value === 'WORK'">
+                        <label class="form-control-label text-label-padding-top col-md-3" for="endDate">Ngày kết
+                            thúc</label>
+                        <div class="col-md-9">
+                            <div class="input-group">
+                                <input class="form-control" id="endDate" formControlName="endDate"
+                                       aria-describedby="basic-addon2"
+                                       [matDatepicker]="endDate"
+                                       (click)="endDate.open()"
+                                       (dateChange)="editForm.patchValue({endDate: editForm.get('endDate').value})"
+                                       placeholder="Chọn ngày kết thúc" readonly>
+                                <div class="input-group-prepend sb-cursor-pointer" (click)="endDate.open()">
+                                    <span class="input-group-text"><i class="flaticon2-calendar-1"></i></span>
+                                </div>
+                                <mat-datepicker #endDate color="warn"></mat-datepicker>
+                            </div>
+                            <div class="error-msg"
+                                 *ngIf="frm.endDate.invalid && (frm.endDate.dirty || frm.endDate.touched)">
+                                <span *ngIf="frm.endDate.errors.required">{{'message.required' | translate}}<br/></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6 row" *ngIf="frm.type.value !== 'WORK'">
+                        <label class="form-control-label text-label-padding-top col-md-3" for="startTime">Thời
+                            gian</label>
+                        <div class="col-md-9">
+                            <div class="row p-0 m-0">
+                                <div class="col-1 text-center font-weight-bold text-label-padding-top pl-0 pr-0">Từ
+                                </div>
+                                <div class="col-5 p-0 m-0">
+                                    <input class="pm-form-control" id="startTime" formControlName="startTime"
+                                           matTimepicker mode="24h" [strict]="false"
+                                           placeholder="Chọn thời gian bắt đầu" readonly>
+                                    <div class="error-msg"
+                                         *ngIf="frm.startTime.invalid && (frm.startTime.dirty || frm.startTime.touched)">
+                                        <span *ngIf="frm.startTime.errors.required">{{'message.required' | translate}}
+                                            <br/></span>
+                                    </div>
+                                </div>
+                                <div class="col-1 text-center font-weight-bold text-label-padding-top pl-0 pr-0">đến
+                                </div>
+                                <div class="col-5 p-0 m-0">
+                                    <input class="pm-form-control" id="endTime" formControlName="endTime"
+                                           matTimepicker mode="24h" [strict]="false"
+                                           placeholder="Chọn thời gian kết thúc" readonly>
+                                    <div class="error-msg"
+                                         *ngIf="frm.endTime.invalid && (frm.endTime.dirty || frm.endTime.touched)">
+                                    <span *ngIf="frm.endTime.errors.required">{{'message.required' | translate}}
+                                        <br/></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6 row" *ngIf="frm.type.value !== 'WORK'">
+                        <label class="form-control-label text-label-padding-top col-md-3" for="dateMeeting">Ngày</label>
+                        <div class="col-md-9">
+                            <div class="input-group">
+                                <input class="form-control" id="dateMeeting" formControlName="dateMeeting"
+                                       aria-describedby="basic-addon2"
+                                       [matDatepicker]="dateMeeting"
+                                       (click)="dateMeeting.open()"
+                                       (dateChange)="editForm.patchValue({dateMeeting: editForm.get('dateMeeting').value})"
+                                       placeholder="Chọn ngày" readonly>
+                                <div class="input-group-prepend sb-cursor-pointer" (click)="dateMeeting.open()">
+                                    <span class="input-group-text"><i class="flaticon2-calendar-1"></i></span>
+                                </div>
+                                <mat-datepicker #dateMeeting color="warn"></mat-datepicker>
+                            </div>
+                            <div class="error-msg"
+                                 *ngIf="frm.dateMeeting.invalid && (frm.dateMeeting.dirty || frm.dateMeeting.touched)">
+                                <span *ngIf="frm.dateMeeting.errors.required">{{'message.required' | translate}}
+                                    <br/></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6 row" *ngIf="frm.type.value !== 'WORK'">
+                        <label class="form-control-label text-label-padding-top col-md-3" for="location">Địa
+                            điểm</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" formControlName="location" id="location"
+                                   placeholder="Nhập địa điểm" trimSpaceBeginEnd/>
+                            <div class="error-msg"
+                                 *ngIf="frm.location.invalid && (frm.location.dirty || frm.location.touched)">
+                                <span *ngIf="frm.location.errors.required">{{'message.required' | translate}}
+                                    <br/></span>
+                                <span *ngIf="frm.location.errors.maxlength">{{'message.maxLength_error' | translate:{maxlength: 255} }}
+                                    <br/></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6 row" *ngIf="frm.type.value !== 'WORK'">
+                        <label class="form-control-label text-label-padding-top col-md-3" for="programme">Chương trình
+                            cụ
+                            thể</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" formControlName="programme" id="programme"
+                                   placeholder="Nhập chương trình" trimSpaceBeginEnd/>
+                            <div class="error-msg"
+                                 *ngIf="frm.programme.invalid && (frm.programme.dirty || frm.programme.touched)">
+                                <span *ngIf="frm.programme.errors.required">{{'message.required' | translate}}
+                                    <br/></span>
+                                <span *ngIf="frm.programme.errors.maxlength">{{'message.maxLength_error' | translate:{maxlength: 255} }}
+                                    <br/></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6 row" *ngIf="frm.type.value !== 'WORK'">
+                        <label class="form-control-label text-label-padding-top col-md-3" for="chairedMeeting">Người chủ
+                            trì</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" formControlName="chairedMeeting" id="chairedMeeting"
+                                   placeholder="Tên người chủ trì" trimSpaceBeginEnd/>
+                            <div class="error-msg"
+                                 *ngIf="frm.chairedMeeting.invalid && (frm.chairedMeeting.dirty || frm.chairedMeeting.touched)">
+                            <span *ngIf="frm.chairedMeeting.errors.required">{{'message.required' | translate}}
+                                <br/></span>
+                                <span *ngIf="frm.chairedMeeting.errors.maxlength">{{'message.maxLength_error' | translate:{maxlength: 255} }}
+                                    <br/></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6 row" *ngIf="frm.type.value !== 'WORK'">
+                        <label class="form-control-label text-label-padding-top col-md-3" for="secretary">Thư ký</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" formControlName="secretary" id="secretary"
+                                   placeholder="Tên thư ký" trimSpaceBeginEnd/>
+                            <div class="error-msg"
+                                 *ngIf="frm.secretary.invalid && (frm.secretary.dirty || frm.secretary.touched)">
+                                <span *ngIf="frm.secretary.errors.required">{{'message.required' | translate}}
+                                    <br/></span>
+                                <span *ngIf="frm.secretary.errors.maxlength">{{'message.maxLength_error' | translate:{maxlength: 255} }}
+                                    <br/></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6 row" *ngIf="frm.type.value !== 'WORK'">
+                        <label class="form-control-label text-label-padding-top col-md-3" for="document">Tài liệu cần
+                            chuẩn bị</label>
+                        <div class="col-md-9">
+                            <input type="file" hidden
+                                   (click)="uploadDocument.value = null; frm.document.markAllAsTouched()"
+                                   #uploadDocument
+                                   (change)="onChangeUploadFile($event, 'document', bucketNameEnums.BUCKET_DOCUMENT)"/>
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Chọn upload file tài liệu"
+                                       (click)="uploadDocument.click()"
+                                       id="document" aria-describedby="basic-addon2" readonly/>
+                                <div class="input-group-append" (click)="uploadDocument.click()">
+                                <span class="input-group-text sb-cursor-pointer">
+                                    <i class="fa fa-file-import sb-color-red"></i></span>
+                                </div>
+                            </div>
+                            <show-file-upload [files]="editForm.value.document"
+                                              (change)="onClearUploadFile($event, 'document')"></show-file-upload>
+                            <div class="error-msg"
+                                 *ngIf="frm.document.invalid && (frm.document.dirty || frm.document.touched)">
+                                <span *ngIf="frm.document.errors.required">{{'message.required' | translate}}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6 row" *ngIf="frm.type.value !== 'WORK'">
+                        <label class="form-control-label text-label-padding-top col-md-3" for="device">Thiết bị</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" formControlName="device" id="device"
+                                   placeholder="Nhập thiết bị" trimSpaceBeginEnd/>
+                            <div class="error-msg"
+                                 *ngIf="frm.device.invalid && (frm.device.dirty || frm.device.touched)">
+                                <span *ngIf="frm.device.errors.required">{{'message.required' | translate}} <br/></span>
+                                <span *ngIf="frm.device.errors.maxlength">{{'message.maxLength_error' | translate:{maxlength: 255} }}
+                                    <br/></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6 row" *ngIf="frm.type.value !== 'WORK'">
+                        <label class="form-control-label text-label-padding-top col-md-3" for="reportMeeting">Biên bản
+                            họp</label>
+                        <div class="col-md-9">
+                            <input type="file" hidden (click)="uploadReportMeeting.value = null" #uploadReportMeeting
+                                   (change)="onChangeUploadFile($event, 'reportMeeting', bucketNameEnums.BUCKET_REPORT)"/>
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Chọn upload biên bản họp"
+                                       (click)="uploadReportMeeting.click()"
+                                       id="reportMeeting" aria-describedby="basic-addon2" readonly/>
+                                <div class="input-group-append" (click)="uploadReportMeeting.click()">
+                                <span class="input-group-text sb-cursor-pointer">
+                                    <i class="fa fa-file-import sb-color-red"></i></span>
+                                </div>
+                            </div>
+                            <show-file-upload [files]="editForm.value.reportMeeting"
+                                              (change)="onClearUploadFile($event, 'reportMeeting')"></show-file-upload>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6 row" *ngIf="frm.type.value !== 'WORK'">
+                        <label class="form-control-label text-label-padding-top col-md-3" for="image">Hình ảnh</label>
+                        <div class="col-md-9">
+                            <input type="file" hidden (click)="uploadImage.value = null" #uploadImage
+                                   (change)="onChangeUploadFile($event, 'image', bucketNameEnums.BUCKET_IMAGE)"/>
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Chọn upload hình ảnh"
+                                       (click)="uploadImage.click()"
+                                       id="image" aria-describedby="basic-addon2" readonly/>
+                                <div class="input-group-append" (click)="uploadImage.click()">
+                                <span class="input-group-text sb-cursor-pointer">
+                                    <i class="fa fa-file-import sb-color-red"></i></span>
+                                </div>
+                            </div>
+                            <show-file-upload [files]="editForm.value.image"
+                                              (change)="onClearUploadFile($event, 'image')"></show-file-upload>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6 row" *ngIf="frm.type.value !== 'WORK'">
+                        <label class="form-control-label text-label-padding-top col-md-3" for="video">Video</label>
+                        <div class="col-md-9">
+                            <input type="file" hidden (click)="uploadVideo.value = null" #uploadVideo
+                                   (change)="onChangeUploadFile($event, 'video', bucketNameEnums.BUCKET_VIDEO)"/>
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Chọn upload video"
+                                       (click)="uploadVideo.click()"
+                                       id="video" aria-describedby="basic-addon2" readonly/>
+                                <div class="input-group-append" (click)="uploadVideo.click()">
+                                <span class="input-group-text sb-cursor-pointer">
+                                    <i class="fa fa-file-import sb-color-red"></i></span>
+                                </div>
+                            </div>
+                            <show-file-upload [files]="editForm.value.video"
+                                              (change)="onClearUploadFile($event, 'video')"></show-file-upload>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6 row">
+                        <label class="form-control-label text-label-padding-top col-md-3" for="note">Ghi chú</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" formControlName="note" id="note"
+                                   placeholder="Nhập ghi chú" trimSpaceBeginEnd/>
+                            <div class="error-msg"
+                                 *ngIf="frm.note.invalid && (frm.note.dirty || frm.note.touched)">
+                                <span *ngIf="frm.note.errors.required">{{'message.required' | translate}} <br/></span>
+                                <span *ngIf="frm.note.errors.maxlength">{{'message.maxLength_error' | translate:{maxlength: 255} }}
+                                    <br/></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6 row">
+                        <label class="form-control-label text-label-padding-top col-md-3" for="percent">Tiến độ</label>
+                        <div class="col-md-9 input-group">
+                            <input type="text" class="form-control text-right" formControlName="percent" id="percent"
+                                   aria-describedby="basic-addon2"/>
+                            <div class="input-group-append"><span class="input-group-text">%</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group border p-5">
+                <div class="form-group" style="display: flex">
+                    <h5 class="font-weight-bold text-label-padding-top">Danh sách nhân viên thực hiện</h5>
+                    <button class="btn btn-sm btn-success ml-10" type="button" (click)="addTaskNewUser()">
+                        <i class="fa fa-plus-circle"></i> {{'BUTTON.ADD' | translate}}
+                    </button>
+                </div>
+
+                <div class="form-group table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th style="width: 1%">STT</th>
+                            <th>Mã nhân viên</th>
+                            <th>Tên nhân viên</th>
+                            <th style="width: 1%"></th>
+                        </tr>
+                        </thead>
+                        <tbody formArrayName="taskUsers">
+                        <tr *ngFor="let item of frmTaskUsers.controls; let i=index">
+                            <ng-container [formGroupName]="i">
+                                <td>{{i + 1}}</td>
+                                <td>
+                                    <span *ngIf="item.value.username">{{item.value.username}}</span>
+                                    <span *ngIf="!item.value.username">
+                                        <ng-select formControlName="username" id="username"
+                                                   [items]="users | async"
+                                                   bindValue="login"
+                                                   bindLabel="login"
+                                                   (change)="addNewUserChange($event, i)"
+                                                   [clearable]="false">
+                                        </ng-select>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span>{{item.value.fullName}}</span>
+                                </td>
+                                <td>
+                                    <button type="button" mat-icon-button matTooltip="{{'BUTTON.DELETE' | translate}}"
+                                            matTooltipPosition="above" (click)="deleteUser(i)">
+                                        <i class="fas fa-trash sb-color-red"></i>
+                                    </button>
+                                </td>
+                            </ng-container>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="form-group border p-5" *ngIf="task.detail !== false">
+                <div class="form-group">
+                    <h5 class="font-weight-bold">Trạng thái hoàn thành</h5>
+                </div>
+                <div class="form-group row">
+                    <div class="form-group col-sm-6 row">
+                        <label class="form-control-label text-label-padding-top col-sm-3" for="status">Trạng
+                            thái</label>
+                        <div class="col-sm-9">
+                            <ng-select formControlName="status" id="status"
+                                       [items]="service.status"
+                                       placeholder="---Chọn trạng thái---"
+                                       bindValue="status"
+                                       bindLabel="desc"
+                                       [clearable]="false"
+                                       (close)="status.focus(); status.blur()" #status>
+                            </ng-select>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6 row">
+                        <label class="form-control-label text-label-padding-top col-sm-3" for="reason">Lí do</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" formControlName="reason" id="reason"/>
+                            <div class="error-msg"
+                                 *ngIf="frm.reason.invalid && (frm.reason.dirty || frm.reason.touched)">
+                                <span *ngIf="frm.reason.errors.maxlength">{{'message.maxLength_error' | translate:{maxlength: 255} }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group border p-5 table-responsive" *ngIf="task.detail !== false">
+                <div class="form-group">
+                    <h5 class="font-weight-bold">Xác nhận các cấp</h5>
+                </div>
+
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th style="width: 1%;">STT</th>
+                        <th>Đối tượng</th>
+                        <th>Xác nhận</th>
+                        <th>Lí do</th>
+                    </tr>
+                    </thead>
+                    <tbody formArrayName="taskConfirms">
+                    <tr *ngFor="let item of frmTaskConfirm.controls; let i=index">
+                        <ng-container [formGroupName]="i">
+                            <td>{{i + 1}}</td>
+                            <td>
+                                <ng-select formControlName="objectConfirm" id="objectConfirm"
+                                           [items]="service.confirmObjectDefault"
+                                           bindValue="objectConfirm"
+                                           bindLabel="objectConfirmName"
+                                           [clearable]="false" [readonly]="true">
+                                </ng-select>
+                            </td>
+                            <td>
+                                <ng-select formControlName="status" id="confirmStatus"
+                                           [items]="service.confirmStatus"
+                                           bindValue="confirmStatus"
+                                           bindLabel="desc"
+                                           placeholder="Chọn trạng thái"
+                                           [clearable]="false">
+                                </ng-select>
+                            </td>
+                            <td>
+                                <div class="input-group">
+                                    <input type="file" hidden (click)="uploadReason.value = null"
+                                           (change)="onChangeUploadReason($event, item.value, i)" #uploadReason/>
+                                    <input type="text" class="form-control" formControlName="reason"
+                                           placeholder="Nhập lí do"
+                                           id="reasonConfirm" aria-describedby="basic-addon2"/>
+                                    <div class="input-group-append" (click)="uploadReason.click()">
+                                        <span class="input-group-text sb-cursor-pointer"><i
+                                                class="fa fa-file-import sb-color-red"></i></span>
+                                    </div>
+                                </div>
+                                <div class="error-msg" *ngIf="frmTaskConfirm.controls[i].get('reason').invalid &&
+                                (frmTaskConfirm.controls[i].get('reason').dirty || frmTaskConfirm.controls[i].get('reason').touched)">
+                                    <span *ngIf="frmTaskConfirm.controls[i]?.get('reason').errors.maxlength">{{'message.maxLength_error' | translate:{maxlength: 255} }}</span>
+                                </div>
+                                <show-file-upload [files]="item.value.files"
+                                                  (change)="onClearUploadReason($event, item.value, i)"></show-file-upload>
+                            </td>
+                        </ng-container>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer text-right">
+            <button mat-raised-button color="primary" type="button" (click)="previousState()" class="mr-2">
+                <span>{{'BUTTON.BACK' | translate}}</span>
+            </button>
+            <button mat-raised-button color="accent" type="submit"
+                    [disabled]="editForm.invalid || (submitProcessing | async)">
+                <span>{{'BUTTON.SAVE' | translate}}</span>
+            </button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,62 @@
+<!--begin::Signin-->
+<div class="login-form login-signin pl-15 pr-15">
+    <!--begin::Form-->
+    <form class="form" [formGroup]="loginForm" novalidate="novalidate" id="kt_login_signin_form" (ngSubmit)="submit()">
+
+        <!-- begin::Alert error-->
+        <ng-container *ngIf="hasError">
+            <div class="mb-10 alert alert-custom alert-light-danger alert-dismissible">
+                <div class="alert-text">{{'AUTH.VALIDATION.LOGIN_ERROR' |translate}}</div>
+            </div>
+        </ng-container>
+        <!-- end::Alert error-->
+
+        <!--begin::Form group-->
+        <div class="form-group fv-plugins-icon-container p-0 mb-5">
+            <label for="username" class="font-size-h6 font-weight-bolder text-light">{{'AUTH.INPUT.USERNAME' | translate}}</label>
+            <input class="form-control text-center h-auto text-white placeholder-white opacity-70 bg-dark-o-70 rounded-pill border-0 py-4 px-8"
+                   placeholder="Tên đăng nhập"
+                   type="text" name="username" id="username" formControlName="username" autocomplete="off"
+                   [ngClass]="{ 'is-invalid': loginForm.controls['username'].invalid }"/>
+            <div class="sb-error"
+                 *ngIf="f.username.invalid && (f.username.dirty || f.username.touched)">
+                {{(f.username.errors.required ? 'AUTH.VALIDATION.USERNAME_REQUIRED' : '')| translate}}
+            </div>
+        </div>
+        <!--end::Form group-->
+
+        <!--begin::Form group-->
+        <div class="form-group fv-plugins-icon-container p-0 mb-5">
+            <label for="password" class="font-size-h6 font-weight-bolder text-light">{{'AUTH.INPUT.PASSWORD' | translate}}</label>
+            <input class="form-control text-center h-auto text-white placeholder-white opacity-70 bg-dark-o-70 rounded-pill border-0 py-4 px-8"
+                   type="password" name="password" id="password" autocomplete="off" formControlName="password"
+                   placeholder="Mật khẩu"
+                   [ngClass]="{ 'is-invalid': loginForm.controls['password'].invalid }"/>
+            <div class="sb-error"
+                 *ngIf="f.password.invalid && (f.password.dirty || f.password.touched)">
+                {{(f.password.errors.required ? 'AUTH.VALIDATION.PASSWORD_REQUIRED' : '')| translate}}
+            </div>
+        </div>
+        <!--end::Form group-->
+
+        <!--begin::Action-->
+        <div class="pb-lg-0 pt-5">
+            <button type="submit" id="kt_login_signin_submit"
+                    [ngClass]="{'spinner spinner-primary spinner-right' : isLoading$ | async}"
+                    class="btn btn-pill btn-outline-white font-weight-bold opacity-90 px-15 py-3"
+                    [disabled]="loginForm.invalid"> {{'AUTH.LOGIN.BUTTON' | translate}}
+            </button>
+        </div>
+        <!--end::Action-->
+    </form>
+    <!--end::Form-->
+</div>
+<!--end::Signin-->
+
+<ng-template #formError let-control="control" let-message="message" let-validation="validation">
+    <ng-container *ngIf="control.hasError(validation) && (control.dirty || control.touched)">
+        <div class="fv-plugins-message-container">
+            <div class="fv-help-block">{{ message }}</div>
+        </div>
+    </ng-container>
+</ng-template>

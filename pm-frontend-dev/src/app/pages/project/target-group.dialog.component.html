@@ -1,0 +1,53 @@
+<div class="card card-custom">
+    <div class="card-header">
+        <div class="card-title">
+            <h3 class="card-label"> Danh sách hợp phần</h3>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th scope="col" style="width: 1%;">STT</th>
+                    <th scope="col">Mã</th>
+                    <th scope="col">Tên</th>
+                    <th scope="col" style="width: 1%;">
+                        <input type=checkbox (click)="selectAll($event)">
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let c of targetGroups | async; let i=index">
+                    <td class="text-center">
+                        <input class="form-control" [hidden]="true" [value]="c.id">{{i + 1}}
+                    </td>
+                    <td>
+                        {{c.code}}
+                    </td>
+                    <td>
+                        {{c.name}}
+                    </td>
+                    <td class="text-center">
+                        <input type=checkbox
+                               (change)="selectTargetGroup(c.code, $event)"
+                               [checked]="c.selected">
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card-footer text-right">
+        <button type="button" class="btn btn-sm btn-danger mr-2" (click)="dialogClose(true)">
+            <span>Hủy</span>
+        </button>
+
+        <button type="button" class="btn btn-sm btn-primary mr-2" (click)="dialogClose(false)">
+            <span>Chọn</span>
+        </button>
+    </div>
+
+</div>

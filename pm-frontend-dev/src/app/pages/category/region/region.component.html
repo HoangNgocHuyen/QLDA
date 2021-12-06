@@ -1,0 +1,108 @@
+<div class="card card-custom mb-3">
+    <form [formGroup]="searchForm" (ngSubmit)="searchRegions(true)">
+        <div class="card-body row pt-3">
+            <div class="form-group col-sm-4 row p-0 m-0 pt-5">
+                <label class="form-control-label text-sm-right col-sm-4 pl-0 pt-2" for="code">Mã khu vực</label>
+                <div class="col-sm-8 pr-0 pl-0">
+                    <input type="text" class="form-control text-uppercase" id="code" trimSpaceBeginEnd
+                           placeholder="Nhập mã" formControlName="code"/>
+                </div>
+            </div>
+
+            <div class="form-group col-sm-4 row p-0 m-0 pt-5">
+                <label class="form-control-label text-sm-right col-sm-4 pl-0 pt-2" for="name">Tên khu vực</label>
+                <div class="col-sm-8 pr-0 pl-0">
+                    <input type="text" class="form-control" id="name" trimSpaceBeginEnd
+                           placeholder="Nhập tên" formControlName="name"/>
+                </div>
+            </div>
+
+            <div class="form-group col-sm-4 row p-0 m-0 pt-5">
+                <label class="form-control-label text-sm-right col-sm-4 pl-0 pt-2" for="type">Loại dữ liệu</label>
+                <ng-select formControlName="type" id="type" class="col-sm-8 pr-0 pl-0"
+                           [items]="service.regionType"
+                           bindValue="type"
+                           bindLabel="desc"
+                           [clearable]="false"
+                           (close)="type.focus(); type.blur()" #type>
+                </ng-select>
+            </div>
+
+            <div class="form-group col-sm-4 row p-0 m-0 pt-5" *ngIf="frm.type.value !== 'AREA'">
+                <label class="form-control-label text-sm-right col-sm-4 pl-0 pt-2" for="regionCode">Vùng/miền</label>
+                <ng-select formControlName="regionCode" id="regionCode" class="col-sm-8 pr-0 pl-0"
+                           [items]="areas | async"
+                           placeholder="Chọn vùng miền"
+                           bindValue="code"
+                           bindLabel="name"
+                           (close)="regionCode.focus(); regionCode.blur()" #regionCode>
+                </ng-select>
+            </div>
+
+            <div class="form-group col-sm-4 row p-0 m-0 pt-5" *ngIf="frm.type.value == 'DISTRICT'">
+                <label class="form-control-label text-sm-right col-sm-4 pl-0 pt-2" for="provinceCode">Tỉnh/Bộ</label>
+                <ng-select formControlName="provinceCode" id="provinceCode" class="col-sm-8 pr-0 pl-0"
+                           [items]="provinces | async"
+                           placeholder="Chọn tỉnh/bộ"
+                           bindValue="code"
+                           bindLabel="name"
+                           (close)="provinceCode.focus(); provinceCode.blur()" #provinceCode>
+                </ng-select>
+            </div>
+
+            <div class="form-group col-sm-12 p-0 m-0 pt-5 text-right">
+                <button mat-raised-button color="primary" type="submit" [disabled]="processingSearch | async">
+                    <span><i class="fas fa-search mr-2 text-light"></i>{{'BUTTON.SEARCH' | translate}}</span>
+                </button>
+                <button style="margin-left: 10px" mat-raised-button color="warn" type="button" class="mr-2"
+                        (click)="createOrUpdate({}, 'CREATED')" [disabled]="processingSearch | async">
+                    <span><i class="fas fa-plus-circle mr-2 text-light"></i>{{'BUTTON.ADD' | translate}}</span>
+                </button>
+            </div>
+
+        </div>
+    </form>
+</div>
+<div class="card card-custom mb-3">
+    <div class="form-group justify-content-md-around px-6 pt-10 table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead>
+            <tr>
+                <th style="width: 1%;">STT</th>
+                <th>Mã khu vực</th>
+                <th>Tên khu vực</th>
+                <th *ngIf="['PROVINCE', 'DISTRICT'].includes(searchForm.value.type)">Vùng/miền</th>
+                <th *ngIf="['DISTRICT'].includes(searchForm.value.type)">Tỉnh/Bộ</th>
+                <th style="width: 10%;">Thao tác</th>
+            </tr>
+            </thead>
+            <tbody *ngIf="(regions | async).length > 0">
+            <tr *ngFor="let region of (regions | async); let i = index">
+                <td>{{(pageIndex * pageSize) + i + 1}}</td>
+                <td>{{region.code}}</td>
+                <td>{{region.name}}</td>
+                <td *ngIf="['PROVINCE', 'DISTRICT'].includes(searchForm.value.type)">{{getViewRegion(region.regionCode, (areas | async))}}</td>
+                <td *ngIf="['DISTRICT'].includes(searchForm.value.type)">{{getViewRegion(region.provinceCode, provincesRaw)}}</td>
+                <td>
+                    <button mat-mini-fab color="primary" matTooltip="{{'BUTTON.EDIT' | translate}}"
+                            matTooltipPosition="above" class="mr-2" (click)="createOrUpdate(region, 'UPDATED')">
+                        <i class="fas fa-edit text-light"></i>
+                    </button>
+                    <button mat-mini-fab color="warn" matTooltip="{{'BUTTON.DELETE' | translate}}"
+                            matTooltipPosition="above" (click)="deleteUnit(region)">
+                        <i class="fas fa-trash text-light"></i>
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="text-center" *ngIf="(regions | async).length <= 0 && !(processingSearch | async)">
+            <span class="font-weight-bold">{{'unit_management.message.not_found_data' | translate}}</span>
+        </div>
+    </div>
+    <mat-paginator [pageIndex]="pageIndex"
+                   [pageSize]="pageSize"
+                   [length]="totalElement"
+                   [pageSizeOptions]="pageOptions"
+                   (page)="pageChange($event)"></mat-paginator>
+</div>

@@ -1,0 +1,7 @@
+<div class="kt-header__topbar-item kt-header__topbar-item&#45;&#45;langs">
+    <div style="display: flex; flex-direction: column; justify-content: center" id="imgLang" matTooltip="{{'TRANSLATOR.SELECT' | translate}}" matTooltipPosition="above">
+        <img (click)="setLanguage(translate.currentLang == 'vn' ? 'en' : 'vn')" class="sb-select-lang sb-cursor-pointer"
+             [src]="translate.currentLang == 'en' ? './assets/media/svg/flags/220-vietnam.svg' : './assets/media/svg/flags/260-united-kingdom.svg'"
+             alt=""/>
+    </div>
+</div>

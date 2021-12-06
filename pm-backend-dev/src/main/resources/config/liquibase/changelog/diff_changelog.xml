@@ -1,0 +1,391 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+
+    <changeSet author="DungPV (generated)" id="1625754319462-1">
+        <createSequence incrementBy="50" sequenceName="sequenceGenerator" startValue="1"/>
+    </changeSet>
+    <changeSet author="DungPV (generated)" id="1625754319462-2">
+        <createSequence incrementBy="50" sequenceName="task_confirm_req" startValue="1"/>
+    </changeSet>
+    <changeSet author="DungPV (generated)" id="1625754319462-3">
+        <createSequence incrementBy="50" sequenceName="task_user_req" startValue="1"/>
+    </changeSet>
+    <changeSet author="DungPV (generated)" id="1625754319462-4">
+        <createSequence incrementBy="1" sequenceName="tasks_req" startValue="1"/>
+    </changeSet>
+    <changeSet author="DungPV (generated)" id="1625754319462-5">
+        <createTable tableName="jhi_authority">
+            <column name="name" type="VARCHAR(50)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="jhi_authorityPK"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="DungPV (generated)" id="1625754319462-6">
+        <createTable tableName="jhi_persistent_audit_event">
+            <column autoIncrement="true" name="event_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="jhi_persistent_audit_eventPK"/>
+            </column>
+            <column name="event_date" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="event_type" type="VARCHAR(255)"/>
+            <column name="principal" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="DungPV (generated)" id="1625754319462-7">
+        <createTable tableName="jhi_persistent_audit_evt_data">
+            <column name="event_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="value" type="VARCHAR(255)"/>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="DungPV (generated)" id="1625754319462-8">
+        <createTable tableName="jhi_user">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="jhi_userPK"/>
+            </column>
+            <column name="created_by" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="last_modified_by" type="VARCHAR(50)"/>
+            <column name="last_modified_date" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="activated" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="activation_key" type="VARCHAR(20)"/>
+            <column name="email" type="VARCHAR(254)"/>
+            <column name="full_name" type="VARCHAR(50)"/>
+            <column name="image_url" type="VARCHAR(256)"/>
+            <column name="lang_key" type="VARCHAR(10)"/>
+            <column name="login" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="mobile" type="VARCHAR(15)"/>
+            <column name="password_hash" type="VARCHAR(60)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="position" type="VARCHAR(255)"/>
+            <column name="reset_date" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="reset_key" type="VARCHAR(20)"/>
+            <column name="unit_code" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="DungPV (generated)" id="1625754319462-9">
+        <createTable tableName="jhi_user_authority">
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="authority_name" type="VARCHAR(50)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="DungPV (generated)" id="1625754319462-10">
+        <createTable tableName="project">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="projectPK"/>
+            </column>
+            <column name="area" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="code" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="created_by" type="VARCHAR(255)"/>
+            <column name="district" type="VARCHAR(255)"/>
+            <column name="end_date" type="TIMESTAMP WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="note" type="VARCHAR(255)"/>
+            <column name="province" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="start_date" type="TIMESTAMP WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="unit" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="updated_by" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="DungPV (generated)" id="1625754319462-11">
+        <createTable tableName="project_target_group">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="project_target_groupPK"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="created_by" type="VARCHAR(255)"/>
+            <column name="project_code" type="VARCHAR(255)"/>
+            <column name="target_group_code" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="DungPV (generated)" id="1625754319462-12">
+        <createTable tableName="project_user">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="project_userPK"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="created_by" type="VARCHAR(255)"/>
+            <column name="project_code" type="VARCHAR(255)"/>
+            <column name="user_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="DungPV (generated)" id="1625754319462-13">
+        <createTable tableName="region">
+            <column name="code" type="VARCHAR(50)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="regionPK"/>
+            </column>
+            <column name="created_by" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="last_modified_by" type="VARCHAR(50)"/>
+            <column name="last_modified_date" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="province_code" type="VARCHAR(255)"/>
+            <column name="region_code" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="DungPV (generated)" id="1625754319462-14">
+        <createTable tableName="schedules">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="schedulesPK"/>
+            </column>
+            <column name="address" type="VARCHAR(255)"/>
+            <column name="assignee_id" type="BIGINT"/>
+            <column name="closed_at" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="closed_by" type="VARCHAR(255)"/>
+            <column name="created_at" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="created_by" type="VARCHAR(255)"/>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="document" type="VARCHAR(255)"/>
+            <column name="done_percent" type="FLOAT8"/>
+            <column name="end_time" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="estimated_time" type="FLOAT8"/>
+            <column name="method" type="VARCHAR(255)"/>
+            <column name="owner_id" type="BIGINT"/>
+            <column name="priority" type="VARCHAR(255)"/>
+            <column name="report_doc" type="VARCHAR(255)"/>
+            <column name="role" type="VARCHAR(255)"/>
+            <column name="secretary_id" type="BIGINT"/>
+            <column name="spent_time" type="FLOAT8"/>
+            <column name="start_time" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="status" type="VARCHAR(255)"/>
+            <column name="task_id" type="BIGINT"/>
+            <column name="title" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="DungPV (generated)" id="1625754319462-15">
+        <createTable tableName="target_group">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="target_groupPK"/>
+            </column>
+            <column name="code" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="created_by" type="VARCHAR(255)"/>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="updated_by" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="DungPV (generated)" id="1625754319462-16">
+        <createTable tableName="targets">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="targetsPK"/>
+            </column>
+            <column name="closed_at" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="closed_by" type="VARCHAR(255)"/>
+            <column name="code" type="VARCHAR(255)"/>
+            <column name="created_at" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="created_by" type="VARCHAR(255)"/>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="done_percent" type="INTEGER"/>
+            <column name="end_time" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="group_id" type="BIGINT"/>
+            <column name="number_day" type="INTEGER"/>
+            <column name="number_day_working" type="INTEGER"/>
+            <column name="number_meeting" type="INTEGER"/>
+            <column name="project_id" type="BIGINT"/>
+            <column name="start_time" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="status" type="VARCHAR(255)"/>
+            <column name="title" type="VARCHAR(255)"/>
+            <column name="unit_code" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="DungPV (generated)" id="1625754319462-17">
+        <createTable tableName="task_confirm">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="task_confirmPK"/>
+            </column>
+            <column name="created_by" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="last_modified_by" type="VARCHAR(50)"/>
+            <column name="last_modified_date" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="files" type="VARCHAR(255)"/>
+            <column name="object_confirm" type="VARCHAR(255)"/>
+            <column name="object_confirm_name" type="VARCHAR(255)"/>
+            <column name="reason" type="VARCHAR(255)"/>
+            <column name="status" type="VARCHAR(255)"/>
+            <column name="task_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="DungPV (generated)" id="1625754319462-18">
+        <createTable tableName="task_user">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="task_userPK"/>
+            </column>
+            <column name="created_by" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="last_modified_by" type="VARCHAR(50)"/>
+            <column name="last_modified_date" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="task_id" type="BIGINT"/>
+            <column name="user_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="DungPV (generated)" id="1625754319462-19">
+        <createTable tableName="tasks">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="tasksPK"/>
+            </column>
+            <column name="created_by" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="last_modified_by" type="VARCHAR(50)"/>
+            <column name="last_modified_date" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="chaired_meeting" type="VARCHAR(255)"/>
+            <column name="code" type="VARCHAR(255)"/>
+            <column name="date_meeting" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="device" type="VARCHAR(255)"/>
+            <column name="document" type="VARCHAR(255)"/>
+            <column name="done_percent" type="FLOAT8"/>
+            <column name="end_date" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="end_time" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="estimated_time" type="BIGINT"/>
+            <column name="image" type="VARCHAR(255)"/>
+            <column name="location" type="VARCHAR(255)"/>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="note" type="VARCHAR(255)"/>
+            <column name="priority" type="VARCHAR(255)"/>
+            <column name="programme" type="VARCHAR(255)"/>
+            <column name="project_code" type="VARCHAR(255)"/>
+            <column name="reason" type="VARCHAR(255)"/>
+            <column name="report" type="VARCHAR(255)"/>
+            <column name="secretary" type="VARCHAR(255)"/>
+            <column name="spent_time" type="BIGINT"/>
+            <column name="start_date" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="start_time" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="status" type="VARCHAR(255)"/>
+            <column name="target_code" type="VARCHAR(255)"/>
+            <column name="task_parent_code" type="VARCHAR(255)"/>
+            <column name="type" type="VARCHAR(255)"/>
+            <column name="video" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="DungPV (generated)" id="1625754319462-20">
+        <createTable tableName="unit">
+            <column name="unit_code" type="VARCHAR(50)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="unitPK"/>
+            </column>
+            <column name="created_by" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="last_modified_by" type="VARCHAR(50)"/>
+            <column name="last_modified_date" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="unit_name" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="DungPV (generated)" id="1625754319462-21">
+        <addUniqueConstraint columnNames="email" constraintName="UC_JHI_USEREMAIL_COL" tableName="jhi_user"/>
+    </changeSet>
+    <changeSet author="DungPV (generated)" id="1625754319462-22">
+        <addUniqueConstraint columnNames="login" constraintName="UC_JHI_USERLOGIN_COL" tableName="jhi_user"/>
+    </changeSet>
+    <changeSet author="DungPV (generated)" id="1625754319462-23">
+        <addUniqueConstraint columnNames="code" constraintName="UC_PROJECTCODE_COL" tableName="project"/>
+    </changeSet>
+    <changeSet author="DungPV (generated)" id="1625754319462-24">
+        <addUniqueConstraint columnNames="code" constraintName="UC_REGIONCODE_COL" tableName="region"/>
+    </changeSet>
+    <changeSet author="DungPV (generated)" id="1625754319462-25">
+        <addUniqueConstraint columnNames="code" constraintName="UC_TARGET_GROUPCODE_COL" tableName="target_group"/>
+    </changeSet>
+    <changeSet author="DungPV (generated)" id="1625754319462-26">
+        <addUniqueConstraint columnNames="unit_code" constraintName="UC_UNITUNIT_CODE_COL" tableName="unit"/>
+    </changeSet>
+    <changeSet author="DungPV (generated)" id="1625754319462-27">
+        <addUniqueConstraint columnNames="project_code, target_group_code" constraintName="idx_pro_tg_code" tableName="project_target_group"/>
+    </changeSet>
+    <changeSet author="DungPV (generated)" id="1625754319462-28">
+        <addUniqueConstraint columnNames="project_code, user_id" constraintName="idx_pro_user_id" tableName="project_user"/>
+    </changeSet>
+    <changeSet author="DungPV (generated)" id="1625754319462-29">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="jhi_user_authority" constraintName="FK290okww5jujghp4el5i7mgwu0" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="jhi_user" validate="true"/>
+    </changeSet>
+    <changeSet author="DungPV (generated)" id="1625754319462-30">
+        <addForeignKeyConstraint baseColumnNames="event_id" baseTableName="jhi_persistent_audit_evt_data" constraintName="FK2ehnyx2si4tjd2nt4q7y40v8m" deferrable="false" initiallyDeferred="false" referencedColumnNames="event_id" referencedTableName="jhi_persistent_audit_event" validate="true"/>
+    </changeSet>
+    <changeSet author="DungPV (generated)" id="1625754319462-31">
+        <addForeignKeyConstraint baseColumnNames="authority_name" baseTableName="jhi_user_authority" constraintName="FK4psxl0jtx6nr7rhqbynr6itoc" deferrable="false" initiallyDeferred="false" referencedColumnNames="name" referencedTableName="jhi_authority" validate="true"/>
+    </changeSet>
+    <changeSet author="DungPV (generated)" id="1625839367884-6">
+        <createTable tableName="project_user">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="project_userPK"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="created_by" type="VARCHAR(255)"/>
+            <column name="project_code" type="VARCHAR(255)"/>
+            <column name="user_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="DungPV (generated)" id="1625839367884-7">
+        <addUniqueConstraint columnNames="project_code, user_id" constraintName="idx_pro_user_id" tableName="project_user"/>
+    </changeSet>
+    <changeSet author="DungPV (generated)" id="1625839367884-8">
+        <dropUniqueConstraint constraintName="uc_areaarea_code_col" tableName="area"/>
+    </changeSet>
+    <changeSet author="DungPV (generated)" id="1625839367884-9">
+        <dropTable tableName="area"/>
+    </changeSet>
+    <changeSet author="DungPV (generated)" id="1625839367884-10">
+        <dropSequence sequenceName="sequence_generator"/>
+    </changeSet>
+    <changeSet author="DungPV (generated)" id="1625839367884-1">
+        <alterSequence sequenceName="sequenceGenerator"/>
+    </changeSet>
+    <changeSet author="DungPV (generated)" id="1625839367884-2">
+        <alterSequence sequenceName="task_confirm_req"/>
+    </changeSet>
+    <changeSet author="DungPV (generated)" id="1625839367884-3">
+        <alterSequence sequenceName="task_user_req"/>
+    </changeSet>
+    <changeSet author="DungPV (generated)" id="1625839367884-4">
+        <alterSequence sequenceName="tasks_req"/>
+    </changeSet>
+    <changeSet author="DungPV (generated)" id="1625839367884-5">
+        <addNotNullConstraint columnDataType="bigint" columnName="pmo_user" tableName="project" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

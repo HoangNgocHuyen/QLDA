@@ -1,0 +1,77 @@
+<div class="card card-custom mb-3">
+    <form [formGroup]="searchForm" (ngSubmit)="searchTargetGroups(true)">
+        <div class="card-body row pt-3">
+            <div class="form-group col-sm-4 row p-0 m-0 pt-5">
+                <label class="form-control-label text-sm-right col-sm-4 pl-0 pt-2" for="code">Mã hợp phần</label>
+                <div class="col-sm-8 pr-0 pl-0">
+                    <input type="text" class="form-control text-uppercase" id="code" trimSpaceBeginEnd
+                           placeholder="Nhập mã hợp phần" formControlName="code"/>
+                </div>
+            </div>
+
+            <div class="form-group col-sm-4 row p-0 m-0 pt-5">
+                <label class="form-control-label text-sm-right col-sm-4 pl-0 pt-2" for="name">Tên hợp phần</label>
+                <div class="col-sm-8 pr-0 pl-0">
+                    <input type="text" class="form-control" id="name" trimSpaceBeginEnd
+                           placeholder="Nhập tên hợp phần" formControlName="name"/>
+                </div>
+            </div>
+
+            <div class="form-group col-sm-4 p-0 m-0 pt-5 text-right">
+                <button mat-raised-button color="primary" type="submit" [disabled]="processingSearch | async">
+                    <span><i class="fas fa-search mr-2 text-light"></i>{{'BUTTON.SEARCH' | translate}}</span>
+                </button>
+                <button style="margin-left: 10px" mat-raised-button color="warn" type="button"
+                        *ngIf="userAuthorities === roleEnums.ROLE_ADMIN && (!userIdentity.unitCode || userIdentity.unitCode === unitCodeSpecial)"
+                        (click)="createOrUpdate({}, 'CREATED')">
+                    <span><i class="fas fa-plus-circle mr-2 text-light"></i>{{'BUTTON.ADD' | translate}}</span>
+                </button>
+            </div>
+
+        </div>
+    </form>
+</div>
+<div class="card card-custom mb-3">
+    <div class="form-group justify-content-md-around px-6 pt-10 table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead>
+            <tr>
+                <th style="width: 1%;">STT</th>
+                <th>Mã hợp phần</th>
+                <th>Tên hợp phần</th>
+                <th>Mô tả</th>
+                <th style="width: 10%;"
+                    *ngIf="userAuthorities === roleEnums.ROLE_ADMIN && (!userIdentity.unitCode || userIdentity.unitCode === unitCodeSpecial)">
+                    Thao tác
+                </th>
+            </tr>
+            </thead>
+            <tbody *ngIf="(targetGroups | async).length > 0">
+            <tr *ngFor="let group of (targetGroups | async); let i = index">
+                <td>{{(pageIndex * pageSize) + i + 1}}</td>
+                <td>{{group.code}}</td>
+                <td>{{group.name}}</td>
+                <td>{{group.description}}</td>
+                <td *ngIf="userAuthorities === roleEnums.ROLE_ADMIN && (!userIdentity.unitCode || userIdentity.unitCode === unitCodeSpecial)">
+                    <button mat-mini-fab color="primary" matTooltip="{{'BUTTON.EDIT' | translate}}"
+                            matTooltipPosition="above" class="mr-2" (click)="createOrUpdate(group, 'UPDATED')">
+                        <i class="fas fa-edit text-light"></i>
+                    </button>
+                    <button mat-mini-fab color="warn" matTooltip="{{'BUTTON.DELETE' | translate}}"
+                            matTooltipPosition="above" (click)="deleteTargetGroup(group)">
+                        <i class="fas fa-trash text-light"></i>
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="text-center" *ngIf="(targetGroups | async).length <= 0 && !(processingSearch | async)">
+            <span class="font-weight-bold">{{'unit_management.message.not_found_data' | translate}}</span>
+        </div>
+    </div>
+    <mat-paginator [pageIndex]="pageIndex"
+                   [pageSize]="pageSize"
+                   [length]="totalElement"
+                   [pageSizeOptions]="pageOptions"
+                   (page)="pageChange($event)"></mat-paginator>
+</div>

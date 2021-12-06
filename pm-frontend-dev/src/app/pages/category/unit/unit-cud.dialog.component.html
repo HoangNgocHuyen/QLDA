@@ -1,0 +1,42 @@
+<div class="card card-custom">
+    <div class="card-header">
+        <div class="card-title">
+            <h3 class="card-label" *ngIf="type === 'CREATED'">Thêm mới đơn vị</h3>
+            <h3 class="card-label" *ngIf="type === 'UPDATED'">Cập nhật đơn vị</h3>
+        </div>
+    </div>
+    <form class="form" [formGroup]="editForm" (ngSubmit)="save()">
+        <div class="card-body row">
+            <div class="form-group col-sm-6">
+                <label class="form-control-label" for="unitCode">Mã đơn vị(*)</label>
+                <input type="text" class="form-control text-uppercase" id="unitCode" formControlName="unitCode"
+                       placeholder="Nhập mã đơn vị" trimSpaceBeginEnd [readOnly]="type === 'UPDATED'"/>
+                <div class="error-msg" *ngIf="frm.unitCode.invalid && (frm.unitCode.dirty || frm.unitCode.touched)">
+                    <span *ngIf="frm.unitCode.errors.required">Trường thông tin bắt buộc nhập <br/></span>
+                    <span *ngIf="frm.unitCode.errors.maxlength">Trường thông tin không vượt quá 50 ký tự <br/></span>
+                    <span *ngIf="frm.unitCode.errors.pattern">Trường thông tin chỉ chứa các chữ, các số và dấu '_', không chứ ký tự đặc biệt</span>
+                </div>
+            </div>
+
+            <div class="form-group col-sm-6">
+                <label class="form-control-label" for="unitName">Tên đơn vị(*)</label>
+                <input type="text" class="form-control" id="unitName" trimSpaceBeginEnd
+                       placeholder="Nhập tên đơn vị" formControlName="unitName"/>
+                <div class="error-msg" *ngIf="frm.unitName.invalid && (frm.unitName.dirty || frm.unitName.touched)">
+                    <span *ngIf="frm.unitName.errors.required">Trường thông tin bắt buộc nhập <br/></span>
+                    <span *ngIf="frm.unitName.errors.maxlength">Trường thông tin không vượt quá 255 ký tự</span>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-right">
+            <button mat-raised-button type="button" class="mr-2"
+                    (click)="dialogRef.close(false)">
+                <span>{{'BUTTON.CANCEL' | translate}}</span>
+            </button>
+            <button mat-raised-button color="primary" type="submit"
+                    [disabled]="editForm.invalid || (isProcessing | async)">
+                <span>{{'BUTTON.APPROVE' | translate}}</span>
+            </button>
+        </div>
+    </form>
+</div>

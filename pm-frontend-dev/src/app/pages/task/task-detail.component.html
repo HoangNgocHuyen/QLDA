@@ -1,0 +1,414 @@
+<div class="card card-custom">
+    <form name="editForm" role="form" novalidate [formGroup]="editForm">
+        <div class="card-body">
+            <div class="form-group border p-5">
+                <div class="form-group">
+                    <h5 class="font-weight-bold">Thông tin công việc</h5>
+                </div>
+                <div class="row">
+                    <div class="form-group col-sm-6 row">
+                        <label class="form-control-label text-label-padding-top col-md-3" for="projectCode">Mã dự
+                            án</label>
+                        <div class="col-md-9">
+                            <ng-select formControlName="projectCode" id="projectCode"
+                                       [items]="projects | async"
+                                       placeholder="---Chọn dữ án---"
+                                       bindValue="code"
+                                       bindLabel="name"
+                                       [readonly]="true"
+                                       [clearable]="false"
+                                       (close)="projectCode.focus(); projectCode.blur()" #projectCode>
+                            </ng-select>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6 row">
+                        <label class="form-control-label text-label-padding-top col-md-3" for="targetCode">Mã mục
+                            tiêu</label>
+                        <div class="col-md-9">
+                            <ng-select formControlName="targetCode" id="targetCode"
+                                       [items]="targets | async"
+                                       placeholder="---Chọn mục tiêu---"
+                                       bindValue="code"
+                                       bindLabel="title"
+                                       [clearable]="false"
+                                       [readonly]="true"
+                                       (close)="targetCode.focus(); targetCode.blur()" #targetCode>
+                            </ng-select>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6 row">
+                        <label class="form-control-label text-label-padding-top col-md-3" for="type">Loại công
+                            việc</label>
+                        <div class="col-md-9">
+                            <ng-select formControlName="type" id="type"
+                                       [items]="service.type"
+                                       bindValue="type"
+                                       bindLabel="desc"
+                                       [clearable]="false"
+                                       [readonly]="true"
+                                       (close)="type.focus(); type.blur()" #type>
+                            </ng-select>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6 row">
+                        <label class="form-control-label text-label-padding-top col-md-3" for="taskParentCode">Mã công
+                            việc cha</label>
+                        <div class="col-md-9">
+                            <ng-select formControlName="taskParentCode" id="taskParentCode"
+                                       [items]="taskParents | async"
+                                       placeholder="---Chọn công việc---"
+                                       bindValue="code"
+                                       bindLabel="name"
+                                       [readonly]="true"
+                                       (close)="taskParentCode.focus(); taskParentCode.blur()" #taskParentCode>
+                            </ng-select>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6 row">
+                        <label class="form-control-label text-label-padding-top col-md-3" for="code">Mã công
+                            việc</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" formControlName="code" id="code"
+                                   placeholder="Nhập mã công việc" disabled/>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6 row">
+                        <label class="form-control-label text-label-padding-top col-md-3" for="name">Tên công
+                            việc</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" formControlName="name" id="name"
+                                   placeholder="Nhập tên công việc" disabled/>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6 row" *ngIf="frm.type.value === 'WORK'">
+                        <label class="form-control-label text-label-padding-top col-md-3" for="startDate">Ngày bắt
+                            đầu</label>
+                        <div class="col-md-9">
+                            <div class="input-group">
+                                <input class="form-control" id="startDate" formControlName="startDate"
+                                       aria-describedby="basic-addon2"
+                                       [matDatepicker]="startDate"
+                                       placeholder="Chọn ngày bắt đầu" disabled>
+                                <div class="input-group-prepend sb-cursor-pointer">
+                                    <span class="input-group-text"><i class="flaticon2-calendar-1"></i></span>
+                                </div>
+                                <mat-datepicker #startDate color="warn"></mat-datepicker>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6 row" *ngIf="frm.type.value === 'WORK'">
+                        <label class="form-control-label text-label-padding-top col-md-3" for="endDate">Ngày kết
+                            thúc</label>
+                        <div class="col-md-9">
+                            <div class="input-group">
+                                <input class="form-control" id="endDate" formControlName="endDate"
+                                       aria-describedby="basic-addon2"
+                                       [matDatepicker]="endDate"
+                                       placeholder="Chọn ngày kết thúc" disabled>
+                                <div class="input-group-prepend sb-cursor-pointer">
+                                    <span class="input-group-text"><i class="flaticon2-calendar-1"></i></span>
+                                </div>
+                                <mat-datepicker #endDate color="warn"></mat-datepicker>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6 row" *ngIf="frm.type.value !== 'WORK'">
+                        <label class="form-control-label text-label-padding-top col-md-3" for="startTime">Thời
+                            gian</label>
+                        <div class="col-md-9">
+                            <div class="row p-0 m-0">
+                                <div class="col-1 text-center font-weight-bold text-label-padding-top pl-0 pr-0">Từ
+                                </div>
+                                <div class="col-5 p-0 m-0">
+                                    <input class="pm-form-control" id="startTime" formControlName="startTime"
+                                           matTimepicker mode="24h" [strict]="false" [disableDialogOpenOnClick]="true"
+                                           placeholder="Chọn thời gian bắt đầu" readonly>
+                                </div>
+                                <div class="col-1 text-center font-weight-bold text-label-padding-top pl-0 pr-0">đến
+                                </div>
+                                <div class="col-5 p-0 m-0">
+                                    <input class="pm-form-control" id="endTime" formControlName="endTime"
+                                           matTimepicker mode="24h" [strict]="false" [disableDialogOpenOnClick]="true"
+                                           placeholder="Chọn thời gian kết thúc" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6 row" *ngIf="frm.type.value !== 'WORK'">
+                        <label class="form-control-label text-label-padding-top col-md-3" for="dateMeeting">Ngày</label>
+                        <div class="col-md-9">
+                            <div class="input-group">
+                                <input class="form-control" id="dateMeeting" formControlName="dateMeeting"
+                                       aria-describedby="basic-addon2"
+                                       [matDatepicker]="dateMeeting"
+                                       placeholder="Chọn ngày" readonly>
+                                <div class="input-group-prepend sb-cursor-pointer">
+                                    <span class="input-group-text"><i class="flaticon2-calendar-1"></i></span>
+                                </div>
+                                <mat-datepicker #dateMeeting color="warn"></mat-datepicker>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6 row" *ngIf="frm.type.value !== 'WORK'">
+                        <label class="form-control-label text-label-padding-top col-md-3" for="location">Địa
+                            điểm</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" formControlName="location" id="location"
+                                   placeholder="Nhập địa điểm" disabled/>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6 row" *ngIf="frm.type.value !== 'WORK'">
+                        <label class="form-control-label text-label-padding-top col-md-3" for="programme">Chương trình
+                            cụ thể</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" formControlName="programme" id="programme"
+                                   placeholder="Nhập chương trình" disabled/>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6 row" *ngIf="frm.type.value !== 'WORK'">
+                        <label class="form-control-label text-label-padding-top col-md-3" for="chairedMeeting">Người chủ
+                            trì</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" formControlName="chairedMeeting" id="chairedMeeting"
+                                   placeholder="Tên người chủ trì" disabled/>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6 row" *ngIf="frm.type.value !== 'WORK'">
+                        <label class="form-control-label text-label-padding-top col-md-3" for="secretary">Thư ký</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" formControlName="secretary" id="secretary"
+                                   placeholder="Tên thư ký" disabled/>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6 row" *ngIf="frm.type.value !== 'WORK'">
+                        <label class="form-control-label text-label-padding-top col-md-3" for="document">Tài liệu cần
+                            chuẩn bị</label>
+                        <div class="col-md-9">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Chọn upload file tài liệu"
+                                       id="document" aria-describedby="basic-addon2" disabled/>
+                                <div class="input-group-append">
+                                <span class="input-group-text sb-cursor-pointer">
+                                    <i class="fa fa-file-import sb-color-red"></i></span>
+                                </div>
+                            </div>
+                            <show-file-upload [files]="editForm.value.document" [disable]="true"></show-file-upload>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6 row" *ngIf="frm.type.value !== 'WORK'">
+                        <label class="form-control-label text-label-padding-top col-md-3" for="device">Thiết bị</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" formControlName="device" id="device"
+                                   placeholder="Nhập thiết bị" disabled/>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6 row" *ngIf="frm.type.value !== 'WORK'">
+                        <label class="form-control-label text-label-padding-top col-md-3" for="reportMeeting">Biên bản
+                            họp</label>
+                        <div class="col-md-9">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Chọn upload biên bản họp"
+                                       id="reportMeeting" aria-describedby="basic-addon2" disabled/>
+                                <div class="input-group-append">
+                                <span class="input-group-text sb-cursor-pointer">
+                                    <i class="fa fa-file-import sb-color-red"></i></span>
+                                </div>
+                            </div>
+                            <show-file-upload [files]="editForm.value.reportMeeting" [disable]="true"></show-file-upload>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6 row" *ngIf="frm.type.value !== 'WORK'">
+                        <label class="form-control-label text-label-padding-top col-md-3" for="image">Hình ảnh</label>
+                        <div class="col-md-9">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Chọn upload hình ảnh"
+                                       id="image" aria-describedby="basic-addon2" disabled/>
+                                <div class="input-group-append">
+                                <span class="input-group-text sb-cursor-pointer">
+                                    <i class="fa fa-file-import sb-color-red"></i></span>
+                                </div>
+                            </div>
+                            <show-file-upload [files]="editForm.value.image" [disable]="true"></show-file-upload>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6 row" *ngIf="frm.type.value !== 'WORK'">
+                        <label class="form-control-label text-label-padding-top col-md-3" for="video">Video</label>
+                        <div class="col-md-9">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Chọn upload video"
+                                       id="video" aria-describedby="basic-addon2" disabled/>
+                                <div class="input-group-append">
+                                <span class="input-group-text sb-cursor-pointer">
+                                    <i class="fa fa-file-import sb-color-red"></i></span>
+                                </div>
+                            </div>
+                            <show-file-upload [files]="editForm.value.video" [disable]="true"></show-file-upload>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6 row">
+                        <label class="form-control-label text-label-padding-top col-md-3" for="note">Ghi chú</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" formControlName="note" id="note"
+                                   placeholder="Nhập ghi chú" disabled/>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6 row">
+                        <label class="form-control-label text-label-padding-top col-md-3" for="percent">Tiến độ</label>
+                        <div class="col-md-9 input-group">
+                            <input type="text" class="form-control text-right" formControlName="percent" id="percent"
+                                   aria-describedby="basic-addon2" disabled/>
+                            <div class="input-group-append"><span class="input-group-text">%</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group border p-5">
+                <div class="form-group" style="display: flex">
+                    <h5 class="font-weight-bold text-label-padding-top">Danh sách nhân viên thực hiện</h5>
+                </div>
+
+                <div class="form-group table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th style="width: 1%">STT</th>
+                            <th>Mã nhân viên</th>
+                            <th>Tên nhân viên</th>
+                        </tr>
+                        </thead>
+                        <tbody formArrayName="taskUsers">
+                        <tr *ngFor="let item of frmTaskUsers.controls; let i=index">
+                            <ng-container [formGroupName]="i">
+                                <td>{{i + 1}}</td>
+                                <td>
+                                    <span *ngIf="item.value.username">{{item.value.username}}</span>
+                                    <span *ngIf="!item.value.username">
+                                        <ng-select formControlName="username" id="username"
+                                                   [items]="users | async"
+                                                   bindValue="login"
+                                                   bindLabel="login"
+                                                   [readonly]="true"
+                                                   [clearable]="false">
+                                        </ng-select>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span>{{item.value.fullName}}</span>
+                                </td>
+                            </ng-container>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="form-group border p-5" *ngIf="task.detail !== false">
+                <div class="form-group">
+                    <h5 class="font-weight-bold">Trạng thái hoàn thành</h5>
+                </div>
+                <div class="form-group row">
+                    <div class="form-group col-sm-6 row">
+                        <label class="form-control-label text-label-padding-top col-sm-3" for="status">Trạng
+                            thái</label>
+                        <div class="col-sm-9">
+                            <ng-select formControlName="status" id="status"
+                                       [items]="service.status"
+                                       placeholder="---Chọn trạng thái---"
+                                       bindValue="status"
+                                       bindLabel="desc"
+                                       [clearable]="false"
+                                       [readonly]="true"
+                                       (close)="status.focus(); status.blur()" #status>
+                            </ng-select>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6 row">
+                        <label class="form-control-label text-label-padding-top col-sm-3" for="reason">Lí do</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" formControlName="reason" id="reason" disabled/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group border p-5 table-responsive" *ngIf="task.detail !== false">
+                <div class="form-group">
+                    <h5 class="font-weight-bold">Xác nhận các cấp</h5>
+                </div>
+
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th style="width: 1%;">STT</th>
+                        <th>Đối tượng</th>
+                        <th>Xác nhận</th>
+                        <th>Lí do</th>
+                    </tr>
+                    </thead>
+                    <tbody formArrayName="taskConfirms">
+                    <tr *ngFor="let item of frmTaskConfirm.controls; let i=index">
+                        <ng-container [formGroupName]="i">
+                            <td>{{i + 1}}</td>
+                            <td>
+                                <ng-select formControlName="objectConfirm" id="objectConfirm"
+                                           [items]="service.confirmObjectDefault"
+                                           bindValue="objectConfirm"
+                                           bindLabel="objectConfirmName"
+                                           [clearable]="false" [readonly]="true">
+                                </ng-select>
+                            </td>
+                            <td>
+                                <ng-select formControlName="status" id="confirmStatus"
+                                           [items]="service.confirmStatus"
+                                           bindValue="confirmStatus"
+                                           bindLabel="desc"
+                                           placeholder="Chọn trạng thái"
+                                           [clearable]="false" [readonly]="true">
+                                </ng-select>
+                            </td>
+                            <td>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" formControlName="reason"
+                                           placeholder="Nhập lí do"
+                                           id="reasonConfirm" aria-describedby="basic-addon2" disabled/>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text sb-cursor-pointer"><i
+                                                class="fa fa-file-import sb-color-red"></i></span>
+                                    </div>
+                                </div>
+                                <show-file-upload [files]="item.value.files" [disable]="true"></show-file-upload>
+                            </td>
+                        </ng-container>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer text-right">
+            <button mat-raised-button color="primary" type="button" (click)="previousState()" class="mr-2">
+                <span>{{'BUTTON.BACK' | translate}}</span>
+            </button>
+        </div>
+    </form>
+</div>

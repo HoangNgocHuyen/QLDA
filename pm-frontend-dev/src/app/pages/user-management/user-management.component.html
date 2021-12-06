@@ -1,0 +1,156 @@
+<div class="card card-custom mb-3">
+    <div class="card-header p-5">
+        <div class="card-title">
+            <h3 class="card-label" style="font-weight: bold"><span>{{'MENU.USER_MANAGEMENT' | translate}}</span></h3>
+        </div>
+        <div class="card-toolbar">
+            <button mat-raised-button color="warn" type="button" class="mr-2" (click)="createOrUpdateUser({})">
+                <span><i class="fas fa-plus-circle mr-2 text-light"></i>{{'BUTTON.ADD' | translate}}</span>
+            </button>
+        </div>
+    </div>
+
+    <form [formGroup]="searchForm" (ngSubmit)="searchUsers()">
+        <div class="card-body row pt-3">
+            <div class="form-group col-sm-4 row p-0 m-0 pt-5">
+                <label class="form-control-label text-sm-right col-sm-4 pl-0 pt-2" for="login">Tên đăng nhập</label>
+                <div class="col-sm-8 pr-0 pl-0">
+                    <input type="text" class="form-control" id="login" trimSpaceBeginEnd
+                           placeholder="Nhập mã tài khoản" formControlName="login"/>
+                    <div class="error-msg" *ngIf="frm.login.invalid && (frm.login.dirty || frm.login.touched)">
+                        <span *ngIf="frm.login.errors.maxlength">Trường thông tin không vượt quá 50 ký tự</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-sm-4 row p-0 m-0 pt-5">
+                <label class="form-control-label text-sm-right col-sm-4 pl-0 pt-2" for="fullName">Họ và tên</label>
+                <div class="col-sm-8 pr-0 pl-0">
+                    <input type="text" class="form-control" id="fullName" trimSpaceBeginEnd
+                           placeholder="Nhập tên tài khoản" formControlName="fullName"/>
+                    <div class="error-msg" *ngIf="frm.fullName.invalid && (frm.fullName.dirty || frm.fullName.touched)">
+                        <span *ngIf="frm.fullName.errors.maxlength">Trường thông tin không vượt quá 50 ký tự</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-sm-4 row p-0 m-0 pt-5">
+                <label class="form-control-label text-sm-right col-sm-4 pl-0 pt-2" for="email">Email</label>
+                <div class="col-sm-8 pr-0 pl-0">
+                    <input type="text" class="form-control" id="email" trimSpaceBeginEnd
+                           placeholder="Nhập email" formControlName="email"/>
+                    <div class="error-msg" *ngIf="frm.email.invalid && (frm.email.dirty || frm.email.touched)">
+                        <span *ngIf="frm.email.errors.maxlength">Trường thông tin không vượt quá 50 ký tự</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-sm-4 row p-0 m-0 pt-5">
+                <label class="form-control-label text-sm-right col-sm-4 pl-0 pt-2" for="activated">Trạng thái</label>
+                <ng-select formControlName="activated" id="activated" class="col-sm-8 pr-0 pl-0"
+                           [items]="status | async"
+                           placeholder="Chọn trạng thái"
+                           bindValue="activated"
+                           (close)="activated.focus(); activated.blur()" #activated>
+                    <ng-template ng-label-tmp let-item="item">
+                        {{item.desc | translate}}
+                    </ng-template>
+                    <ng-template ng-option-tmp let-item="item">
+                        {{item.desc | translate}}
+                    </ng-template>
+                </ng-select>
+            </div>
+
+            <div class="form-group col-sm-4 row p-0 m-0 pt-5">
+                <label class="form-control-label text-sm-right col-sm-4 pl-0 pt-2" for="position">Chức vụ</label>
+                <ng-select formControlName="position" id="position" class="col-sm-8 pr-0 pl-0"
+                           [items]="(positions | async)"
+                           placeholder="Chọn chức vụ"
+                           bindValue="position"
+                           (close)="position.focus(); position.blur()" #position>
+                    <ng-template ng-label-tmp let-item="item">
+                        {{item.desc | translate}}
+                    </ng-template>
+                    <ng-template ng-option-tmp let-item="item">
+                        {{item.desc | translate}}
+                    </ng-template>
+                </ng-select>
+            </div>
+
+            <div class="form-group col-sm-4 row p-0 m-0 pt-5" *ngIf="!userIdentity?.unitCode || userIdentity?.unitCode === unitCodeSpecial">
+                <label class="form-control-label text-sm-right col-sm-4 pl-0 pt-2" for="unitCode">Đơn vị</label>
+                <ng-select formControlName="unitCode" id="unitCode" class="col-sm-8 pr-0 pl-0"
+                           [items]="units | async"
+                           placeholder="Chọn đơn vị"
+                           bindValue="unitCode"
+                           (close)="unitCode.focus(); unitCode.blur()" #unitCode>
+                    <ng-template ng-label-tmp let-item="item">
+                        {{item.unitName}}
+                    </ng-template>
+                    <ng-template ng-option-tmp let-item="item">
+                        {{item.unitName}}
+                    </ng-template>
+                </ng-select>
+            </div>
+            <div class="form-group col-sm-12 p-0 m-0 pt-5 text-right">
+                <button mat-raised-button color="primary" type="submit" [disabled]="processingSearch | async">
+                    <span><i class="fas fa-search mr-2 text-light"></i>{{'BUTTON.SEARCH' | translate}}</span>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="card card-custom mb-3">
+    <div class="form-group justify-content-md-around px-6 pt-10 table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead>
+            <tr>
+                <th>STT</th>
+                <th>Tên đăng nhập</th>
+                <th>Họ và tên</th>
+                <th>Số điện thoại</th>
+                <th>Email</th>
+                <th>Chức vụ</th>
+                <th>Đơn vị</th>
+                <th>Trạng thái</th>
+                <th>Thao tác</th>
+            </tr>
+            </thead>
+            <tbody *ngIf="(users | async).length > 0">
+            <tr *ngFor="let user of (users | async); let i = index">
+                <td>{{(pageIndex * pageSize) + i + 1}}</td>
+                <td>{{user.login}}</td>
+                <td>{{user.fullName}}</td>
+                <td>{{user.mobile}}</td>
+                <td>{{user.email}}</td>
+                <td>
+                    <span *ngIf="user.position !==null">{{('user_management.position.' + user.position) | translate}}</span>
+                </td>
+                <td>{{getViewUnit(user.unitCode)}}</td>
+                <td>
+                    <mat-slide-toggle (change)="activeUser($event, user)" [checked]="user.activated"
+                                      [disabled]="user.login === 'admin' || userIdentity.login === user.login">
+                        {{(user.activated === true ? 'user_management.status.activated' : 'user_management.status.not_activated') | translate}}</mat-slide-toggle>
+                </td>
+                <td>
+                    <button mat-mini-fab color="primary" matTooltip="{{'BUTTON.EDIT' | translate}}"
+                            [disabled]="user.login === 'admin'"
+                            matTooltipPosition="above" class="mr-2" (click)="createOrUpdateUser(user)">
+                        <i class="fas fa-edit text-light"></i>
+                    </button>
+                    <button mat-mini-fab color="warn" matTooltip="{{'BUTTON.DELETE' | translate}}"
+                            [disabled]="user.login === 'admin'"
+                            matTooltipPosition="above" (click)="deleteUser(user)">
+                        <i class="fas fa-trash text-light"></i>
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="text-center" *ngIf="(users | async).length <= 0 && !(processingSearch | async)">
+            <span class="font-weight-bold">{{'user_management.message.not_found_data' | translate}}</span>
+        </div>
+    </div>
+    <mat-paginator [pageIndex]="pageIndex"
+                   [pageSize]="pageSize"
+                   [length]="totalElement"
+                   [pageSizeOptions]="pageOptions"
+                   (page)="pageChange($event)"></mat-paginator>
+</div>

@@ -1,0 +1,202 @@
+<div class="card card-custom">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+
+    <div class="card-body row">
+        <div class="form-group col-sm-12">
+            <h2 *ngIf="!editForm.get('id')!.value">Thêm mới mục tiêu</h2>
+            <h2 *ngIf="editForm.get('id')!.value">Cập nhật mục tiêu</h2>
+        </div>
+        <div class="form-group col-sm-6">
+            <label class="form-control-label" for="projectName">Dự án</label>
+            <input type="text" class="form-control" name="projectName" id="projectName" readonly formControlName="projectName"/>
+            <input type="hidden" class="form-control" name="projectCode" formControlName="projectCode"/>
+        </div>
+
+        <div class="form-group col-sm-6">
+            <label class="form-control-label" for="unitCode">Mã đơn vị</label>
+            <ng-select formControlName="unitCode" id="unitCode"
+                       [items]="Units | async"
+                       placeholder="Đơn vị"
+                       bindValue="unitCode"
+                       [clearable]="false"
+                       (close)="unitCode.focus(); unitCode.blur()" #unitCode>
+                <ng-template ng-label-tmp let-item="item">
+                    {{item.unitName}}
+                </ng-template>
+                <ng-template ng-option-tmp let-item="item">
+                    {{item.unitName}}
+                </ng-template>
+            </ng-select>
+<!--            <input type="text" class="form-control" name="unitCode" id="unitCode" readonly formControlName="unitCode"/>-->
+            <div class="error-msg" *ngIf="frm.unitCode.invalid && (frm.unitCode.dirty || frm.unitCode.touched)">
+                <span *ngIf="frm.unitCode.errors.required">Trường thông tin bắt buộc chọn</span>
+            </div>
+        </div>
+
+        <div class="form-group col-sm-6">
+            <label class="form-control-label" for="groupCode">Hợp phần</label>
+            <ng-select formControlName="groupCode" id="groupCode"
+                       [items]="Groups | async"
+                       placeholder="Hợp phần"
+                       bindValue="groupCode"
+                       [clearable]="false"
+                       (close)="groupCode.focus(); groupCode.blur()" #groupCode>
+                <ng-template ng-label-tmp let-item="item">
+                    {{item.groupName | translate}}
+                </ng-template>
+                <ng-template ng-option-tmp let-item="item">
+                    {{item.groupName | translate}}
+                </ng-template>
+            </ng-select>
+            <div class="error-msg" *ngIf="frm.groupCode.invalid && (frm.groupCode.dirty || frm.groupCode.touched)">
+                <span *ngIf="frm.groupCode.errors.required">Trường thông tin bắt buộc chọn</span>
+            </div>
+        </div>
+
+        <div class="form-group col-sm-6">
+            <label class="form-control-label" for="code">Mã mục tiêu</label>
+            <input type="text" class="form-control" name="code" id="code" [readOnly]="editForm.value.id"
+                   formControlName="code"/>
+            <div class="error-msg" *ngIf="frm.code.invalid && (frm.code.dirty || frm.code.touched)">
+                <span *ngIf="frm.code.errors.required">Trường thông tin bắt buộc nhập</span>
+                <span *ngIf="frm.code.errors.pattern">Không đúng định dạng</span>
+            </div>
+        </div>
+
+        <div class="form-group col-sm-6">
+            <label class="form-control-label" for="title">Mục tiêu</label>
+            <input type="text" class="form-control" name="title" id="title"
+                   formControlName="title"/>
+            <div class="error-msg" *ngIf="frm.title.invalid && (frm.title.dirty || frm.title.touched)">
+                <span *ngIf="frm.title.errors.required">Trường thông tin bắt buộc nhập</span>
+            </div>
+        </div>
+
+        <div class="form-group col-sm-6">
+            <label class="form-control-label" for="status">Trạng thái</label>
+            <ng-select formControlName="status" id="status"
+                       [items]="service.status"
+                       placeholder="Status"
+                       bindValue="status"
+                       [clearable]="false"
+                       (close)="status.focus(); status.blur()" #status>
+                <ng-template ng-label-tmp let-item="item">
+                    {{item.desc | translate}}
+                </ng-template>
+                <ng-template ng-option-tmp let-item="item">
+                    {{item.desc | translate}}
+                </ng-template>
+            </ng-select>
+            <div class="error-msg" *ngIf="frm.status.invalid && (frm.status.dirty || frm.status.touched)">
+                <span *ngIf="frm.status.errors.required">Trường thông tin bắt buộc chọn</span>
+            </div>
+        </div>
+
+        <div class="form-group col-sm-6">
+            <label class="form-control-label" for="startTime">Ngày bắt đầu</label>
+            <div class="input-group">
+                <input class="form-control" id="startTime"
+                       formControlName="startTime"
+                       [matDatepicker]="picker"
+                       (click)="picker.open()"
+                       (dateChange)="editForm.patchValue({startTime: editForm.get('startTime').value})"
+                       placeholder="Ngày bắt đầu" readonly>
+                <div class="input-group-prepend sb-cursor-pointer">
+                <span class="input-group-text p-2 sb-radius-right" (click)="picker.open()">
+                    <i class="flaticon2-calendar-1"></i>
+                </span>
+                    <mat-datepicker #picker color="warn"></mat-datepicker>
+                </div>
+            </div>
+            <div class="error-msg" *ngIf="frm.startTime.invalid && (frm.startTime.dirty || frm.startTime.touched)">
+                <span *ngIf="frm.startTime.errors.required">Trường thông tin bắt buộc chọn</span>
+            </div>
+        </div>
+
+        <div class="form-group col-sm-6">
+            <label class="form-control-label" for="endTime">Ngày kết thúc</label>
+            <div class="input-group">
+                <input class="form-control"
+                       formControlName="endTime" id="endTime"
+                       [matDatepicker]="pickerEnd"
+                       (click)="pickerEnd.open()"
+                       (dateChange)="editForm.patchValue({endTime: editForm.get('endTime').value})"
+                       placeholder="Ngày kết thúc" readonly>
+                <div class="input-group-prepend sb-cursor-pointer">
+                <span class="input-group-text p-2 sb-radius-right" (click)="pickerEnd.open()">
+                    <i class="flaticon2-calendar-1"></i>
+                </span>
+                    <mat-datepicker #pickerEnd color="warn"></mat-datepicker>
+                </div>
+            </div>
+            <div class="error-msg" *ngIf="frm.endTime.invalid && (frm.endTime.dirty || frm.endTime.touched)">
+                <span *ngIf="frm.endTime.errors.required">Trường thông tin bắt buộc chọn</span>
+            </div>
+        </div>
+
+        <div class="form-group col-sm-6">
+            <label class="form-control-label" for="numberDay">Số ngày</label>
+            <input type="text" class="form-control" name="numberDay" id="numberDay"
+                   formControlName="numberDay"/>
+            <div class="error-msg" *ngIf="frm.numberDay.invalid && (frm.numberDay.dirty || frm.numberDay.touched)">
+                <span *ngIf="frm.numberDay.errors.required">Trường thông tin bắt buộc nhập</span>
+                <span *ngIf="frm.numberDay.errors.pattern">Không đúng định dạng</span>
+                <span *ngIf="frm.numberDay.errors.min">Số ngày phải >= 0</span>
+                <span *ngIf="frm.numberDay.errors.max">Số ngày phải <= 100</span>
+            </div>
+        </div>
+
+        <div class="form-group col-sm-6">
+            <label class="form-control-label" for="numberDayWorking">Ngày làm việc</label>
+            <input type="text" class="form-control" name="numberDayWorking" id="numberDayWorking"
+                   formControlName="numberDayWorking"/>
+            <div class="error-msg" *ngIf="frm.numberDayWorking.invalid && (frm.numberDayWorking.dirty || frm.numberDayWorking.touched)">
+                <span *ngIf="frm.numberDayWorking.errors.required">Trường thông tin bắt buộc nhập</span>
+                <span *ngIf="frm.numberDayWorking.errors.pattern">Không đúng định dạng</span>
+                <span *ngIf="frm.numberDayWorking.errors.min">Số ngày làm việc phải >= 0</span>
+                <span *ngIf="frm.numberDayWorking.errors.max">Số ngày làm việc phải <= 100</span>
+            </div>
+        </div>
+
+        <div class="form-group col-sm-6">
+            <label class="form-control-label" for="numberDayWorking">Số cuộc họp</label>
+            <input type="text" class="form-control" name="numberMeeting" id="numberMeeting"
+                   formControlName="numberMeeting"/>
+            <div class="error-msg" *ngIf="frm.numberMeeting.invalid && (frm.numberMeeting.dirty || frm.numberMeeting.touched)">
+                <span *ngIf="frm.numberMeeting.errors.required">Trường thông tin bắt buộc nhập</span>
+                <span *ngIf="frm.numberMeeting.errors.pattern">Không đúng định dạng</span>
+                <span *ngIf="frm.numberMeeting.errors.min">Số cuộc họp phải >= 0</span>
+                <span *ngIf="frm.numberMeeting.errors.max">Số cuộc họp phải <= 100</span>
+            </div>
+        </div>
+
+        <div class="form-group col-sm-6">
+            <label class="form-control-label" for="donePercent">Tiến độ(%)</label>
+            <input type="text" class="form-control" name="donePercent" id="donePercent"
+                   formControlName="donePercent"/>
+            <div class="error-msg" *ngIf="frm.donePercent.invalid && (frm.donePercent.dirty || frm.donePercent.touched)">
+                <span *ngIf="frm.donePercent.errors.required">Trường thông tin bắt buộc nhập</span>
+                <span *ngIf="frm.donePercent.errors.pattern">Không đúng định dạng</span>
+                <span *ngIf="frm.donePercent.errors.min">Tiến độ phải >= 0</span>
+                <span *ngIf="frm.donePercent.errors.max">Tiến độ phải <= 100</span>
+            </div>
+        </div>
+
+        <div class="form-group col-sm-12">
+            <label class="form-control-label" for="description">Mô tả</label>
+            <textarea type="text" class="form-control" name="description" id="description" rows="5"
+                      formControlName="description"></textarea>
+        </div>
+
+
+        <div class="formGroup">
+            <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+                Quay lại
+            </button>
+            <button style="margin-left: 10px" type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                Lưu
+            </button>
+        </div>
+    </div>
+    </form>
+</div>

@@ -1,0 +1,105 @@
+{
+  "name": "Schedules",
+  "fields": [
+    {
+      "fieldName": "taskId",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "title",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "address",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "assigneeId",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "method",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "startTime",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "endTime",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "estimatedTime",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "spentTime",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "priority",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "role",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "ScheduleStatusEnum",
+      "fieldValues": "OPEN,IN_PROGRESS,RESOLVED,REJECTED,PENDING,CLOSED,FEED_BACK"
+    },
+    {
+      "fieldName": "donePercent",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "createdAt",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "createdBy",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "closedAt",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "closedBy",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "document",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "reportDoc",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "secretaryId",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "ownerId",
+      "fieldType": "Long"
+    }
+  ],
+  "relationships": [],
+  "changelogDate": "20210519144001",
+  "entityTableName": "schedules",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "clientRootFolder": "",
+  "applications": "*"
+}

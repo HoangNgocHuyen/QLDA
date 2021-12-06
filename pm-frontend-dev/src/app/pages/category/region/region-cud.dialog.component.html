@@ -1,0 +1,86 @@
+<div class="card card-custom">
+    <div class="card-header">
+        <div class="card-title">
+            <h3 class="card-label" *ngIf="action === 'CREATED'">Thêm mới</h3>
+            <h3 class="card-label" *ngIf="action === 'UPDATED'">Cập nhật</h3>
+        </div>
+    </div>
+    <form class="form" [formGroup]="editForm" (ngSubmit)="save()">
+        <div class="card-body row">
+
+            <div class="form-group col-sm-6">
+                <label class="form-control-label" for="type">Loại dữ liệu</label>
+                <ng-select formControlName="type" id="type"
+                           [items]="service.regionType"
+                           bindValue="type"
+                           bindLabel="desc"
+                           [clearable]="false"
+                           [readonly]="action === 'UPDATED'"
+                           (close)="type.focus(); type.blur()" #type>
+                </ng-select>
+            </div>
+
+            <div class="form-group col-sm-6" *ngIf="['PROVINCE', 'DISTRICT'].includes(editForm.value.type)">
+                <label class="form-control-label" for="regionCode">Vùng/miền</label>
+                <ng-select formControlName="regionCode" id="regionCode"
+                           [items]="areas | async"
+                           placeholder="Chọn vùng/miền"
+                           bindValue="code"
+                           bindLabel="name"
+                           (close)="regionCode.focus(); regionCode.blur()" #regionCode>
+                </ng-select>
+                <div class="error-msg"
+                     *ngIf="frm.regionCode.invalid && (frm.regionCode.dirty || frm.regionCode.touched)">
+                    <span *ngIf="frm.regionCode.errors.required">Trường thông tin bắt buộc chọn</span>
+                </div>
+            </div>
+
+            <div class="form-group col-sm-6" *ngIf="['DISTRICT'].includes(editForm.value.type)">
+                <label class="form-control-label" for="provinceCode">Tỉnh/Bộ</label>
+                <ng-select formControlName="provinceCode" id="provinceCode"
+                           [items]="provinces | async"
+                           placeholder="Chọn tỉnh/bộ"
+                           bindValue="code"
+                           bindLabel="name"
+                           (close)="provinceCode.focus(); provinceCode.blur()" #provinceCode>
+                </ng-select>
+                <div class="error-msg"
+                     *ngIf="frm.provinceCode.invalid && (frm.provinceCode.dirty || frm.provinceCode.touched)">
+                    <span *ngIf="frm.provinceCode.errors.required">Trường thông tin bắt buộc chọn</span>
+                </div>
+            </div>
+
+            <div class="form-group col-sm-6">
+                <label class="form-control-label" for="code">Mã khu vực(*)</label>
+                <input type="text" class="form-control text-uppercase" id="code" formControlName="code"
+                       placeholder="Nhập mã khu vực" trimSpaceBeginEnd [readOnly]="action === 'UPDATED'"/>
+                <div class="error-msg" *ngIf="frm.code.invalid && (frm.code.dirty || frm.code.touched)">
+                    <span *ngIf="frm.code.errors.required">Trường thông tin bắt buộc nhập <br/></span>
+                    <span *ngIf="frm.code.errors.maxlength">Trường thông tin không vượt quá 50 ký tự <br/></span>
+                    <span *ngIf="frm.code.errors.pattern">Trường thông tin chỉ chứa các chữ, các số và dấu '_', không chứ ký tự đặc biệt</span>
+                </div>
+            </div>
+
+            <div class="form-group col-sm-6">
+                <label class="form-control-label" for="name">Tên khu vực(*)</label>
+                <input type="text" class="form-control" id="name" trimSpaceBeginEnd
+                       placeholder="Nhập tên khu vực" formControlName="name"/>
+                <div class="error-msg" *ngIf="frm.name.invalid && (frm.name.dirty || frm.name.touched)">
+                    <span *ngIf="frm.name.errors.required">Trường thông tin bắt buộc nhập <br/></span>
+                    <span *ngIf="frm.name.errors.maxlength">Trường thông tin không vượt quá 255 ký tự</span>
+                </div>
+            </div>
+
+        </div>
+        <div class="card-footer text-right">
+            <button mat-raised-button type="button" class="mr-2"
+                    (click)="dialogRef.close(false)">
+                <span>{{'BUTTON.CANCEL' | translate}}</span>
+            </button>
+            <button mat-raised-button color="primary" type="submit"
+                    [disabled]="editForm.invalid || (isProcessing | async)">
+                <span>{{'BUTTON.APPROVE' | translate}}</span>
+            </button>
+        </div>
+    </form>
+</div>

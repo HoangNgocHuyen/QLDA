@@ -1,0 +1,11 @@
+/src/
+.pom.xml
+/.git/
+
+/.settings
+.classpath
+.project
+.springBeans
+
+/target/
+!/target/*.jar

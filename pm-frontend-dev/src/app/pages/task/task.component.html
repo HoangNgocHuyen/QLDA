@@ -1,0 +1,164 @@
+<!--Search form-->
+<div class="card card-custom mb-3">
+    <form [formGroup]="searchFrom" (ngSubmit)="loadTasks()">
+        <div class="card-body row pt-3">
+            <div class="form-group col-sm-4 row p-0 m-0 pt-5">
+                <label class="form-control-label text-sm-right col-sm-4 pl-0 pt-2">Mã dự án</label>
+                <div class="col-sm-8 pr-0 pl-0">
+                    <input type="text" class="form-control" formControlName="projectCode"/>
+                </div>
+            </div>
+            <div class="form-group col-sm-4 row p-0 m-0 pt-5">
+                <label class="form-control-label text-sm-right col-sm-4 pl-0 pt-2">Mã công việc</label>
+                <div class="col-sm-8 pr-0 pl-0">
+                    <input type="text" class="form-control" formControlName="code"/>
+                </div>
+            </div>
+            <div class="form-group col-sm-4 row p-0 m-0 pt-5">
+                <label class="form-control-label text-sm-right col-sm-4 pl-0 pt-2">Mã công việc cha</label>
+                <div class="col-sm-8 pr-0 pl-0">
+                    <input type="text" class="form-control" formControlName="parentCode"/>
+                </div>
+            </div>
+            <div class="form-group col-sm-4 row p-0 m-0 pt-5">
+                <label class="form-control-label text-sm-right col-sm-4 pl-0 pt-2">Mã mục tiên</label>
+                <div class="col-sm-8 pr-0 pl-0">
+                    <input type="text" class="form-control" formControlName="targetCode"/>
+                </div>
+            </div>
+            <div class="form-group col-sm-4 row p-0 m-0 pt-5">
+                <label class="form-control-label text-sm-right col-sm-4 pl-0 pt-2">Tên công việc</label>
+                <div class="col-sm-8 pr-0 pl-0">
+                    <input type="text" class="form-control" formControlName="name"/>
+                </div>
+            </div>
+            <div class="form-group col-sm-4 row p-0 m-0 pt-5">
+                <label class="form-control-label text-sm-right col-sm-4 pl-0 pt-2">Loại công việc</label>
+                <div class="col-sm-8 pr-0 pl-0">
+                    <ng-select formControlName="type" id="type"
+                               [items]="taskType"
+                               placeholder="Loại công việc"
+                               bindLabel="name"
+                               bindValue="code"
+                               [clearable]="false"
+                               (close)="type.focus(); type.blur()" #type>
+                    </ng-select>
+                </div>
+            </div>
+
+            <div class="form-group col-sm-4 row p-0 m-0 pt-5">
+                <label class="form-control-label text-sm-right col-sm-4 pl-0 pt-2" for="startDate">Ngày bắt đầu từ</label>
+                <div class="col-sm-8 pr-0 pl-0 input-group">
+                    <input class="form-control" id="startDate"
+                           formControlName="startDate"
+                           [matDatepicker]="picker"
+                           (click)="picker.open()"
+                           (dateChange)="searchFrom.patchValue({startDate: searchFrom.get('startDate').value})"
+                           placeholder="Ngày bắt đầu từ">
+                    <div class="input-group-prepend sb-cursor-pointer">
+                        <span class="input-group-text p-2 sb-radius-right" (click)="picker.open()">
+                            <i class="flaticon2-calendar-1"></i>
+                        </span>
+                        <mat-datepicker #picker color="warn"></mat-datepicker>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group col-sm-4 row p-0 m-0 pt-5">
+                <label class="form-control-label text-sm-right col-sm-4 pl-0 pt-2" for="endDate">Ngày bắt đầu đến</label>
+                <div class="col-sm-8 pr-0 pl-0 input-group">
+                    <input class="form-control"
+                           formControlName="endDate" id="endDate"
+                           [matDatepicker]="pickerEnd"
+                           (click)="pickerEnd.open()"
+                           (dateChange)="searchFrom.patchValue({endDate: searchFrom.get('endDate').value})"
+                           placeholder="Ngày bắt đầu đến">
+                    <div class="input-group-prepend sb-cursor-pointer">
+                        <span class="input-group-text p-2 sb-radius-right" (click)="pickerEnd.open()">
+                            <i class="flaticon2-calendar-1"></i>
+                        </span>
+                        <mat-datepicker #pickerEnd color="warn"></mat-datepicker>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group col-sm-12 p-0 m-0 pt-5 text-right">
+                <button mat-raised-button color="primary" type="submit">
+                    <span><i class="fas fa-search mr-2 text-light"></i>{{'BUTTON.SEARCH' | translate}}</span>
+                </button>
+                <button style="margin-left: 10px" mat-raised-button color="warn" type="button" class="mr-2" [routerLink]="['/task', 'add']">
+                    <span><i class="fas fa-plus-circle mr-2 text-light"></i>{{'BUTTON.ADD' | translate}}</span>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!--Table-->
+<div class="card card-custom">
+    <div class="card-header">
+        <div class="card-title">
+            <h4 class="card-label">Danh sách task</h4>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive" style="max-height: 60vh;">
+            <div *ngIf="(loading|async)">Loading ...</div>
+            <table class="table table-bordered" matSort (matSortChange)="sortData($event)">
+                <thead>
+                <tr>
+                    <th class="text-center" scope="col">STT</th>
+                    <th class="text-center" scope="col">Mã nhân viên</th>
+                    <th class="text-center" scope="col">Họ và tên</th>
+                    <th class="text-center" scope="col">Chức vụ</th>
+                    <th class="text-center" scope="col">Đơn vị</th>
+                    <th class="text-center" scope="col">Mã công việc</th>
+                    <th class="text-center" scope="col">Tên công việc</th>
+                    <th class="text-center" scope="col">Loại công việc</th>
+                    <th class="text-center" scope="col">Mã dự án</th>
+                    <th class="text-center" scope="col">Mã mục tiêu</th>
+                    <th class="text-center" scope="col">Mã CV cha</th>
+                    <th class="text-center" scope="col">Trạng thái</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let task of tasks | async; let i = index;">
+                    <td class="text-center">
+                        <div>{{i + 1}}</div>
+                        <div class="btn-group btn-group-sm">
+                            <button type="button" class="btn btn-info" data-toggle="tooltip" title="Chi tiết"
+                                    [routerLink]="['/task', task.id, 'view']">
+                                <i class="fa fa-eye"></i>
+                            </button>
+                            <button type="button" class="btn btn-primary" data-toggle="tooltip" title="Chỉnh sửa"
+                                    [routerLink]="['/task', task.id, 'edit']">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                        </div>
+                    </td>
+                    <td>{{task.userName}}</td>
+                    <td>{{task.fullName}}</td>
+                    <td>{{task.position}}</td>
+                    <td>{{getViewUnit(task.unit, units)}}</td>
+                    <td>{{task.code}}</td>
+                    <td>{{task.name}}</td>
+                    <td>{{task.type === 'WORK' ? 'Công việc' : 'Lịch Họp'}}</td>
+                    <td>{{task.projectCode}}</td>
+                    <td>{{task.targetCode}}</td>
+                    <td>{{task.taskParentCode}}</td>
+                    <td>{{task.status}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                       [pageSize]="this.pageable.size"
+                       [pageIndex]="this.pageable.page"
+                       [length]="this.totalTask | async"
+                       (page)="onChangePage($event)"
+                       showFirstLastButtons="true">
+        </mat-paginator>
+    </div>
+</div>
+

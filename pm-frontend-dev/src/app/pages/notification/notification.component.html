@@ -1,0 +1,130 @@
+<div class="card card-custom mb-3">
+    <form [formGroup]="searchFrom" (ngSubmit)="loadNotifications()">
+        <div class="card-body row pt-3">
+            <div class="form-group col-sm-4 row p-0 m-0 pt-5">
+                <label class="form-control-label text-sm-right col-sm-4 pl-0 pt-2" for="title">Tên thông báo</label>
+                <div class="col-sm-8 pr-0 pl-0">
+                <input type="text" class="form-control" name="title" id="title"
+                       formControlName="title"/>
+                </div>
+            </div>
+            <div class="form-group col-sm-4 row p-0 m-0 pt-5">
+                <label class="form-control-label text-sm-right col-sm-4 pl-0 pt-2" for="status">Trạng thái</label>
+                <div class="col-sm-8 pr-0 pl-0">
+                    <ng-select formControlName="status" id="status"
+                               [items]="service.status"
+                               placeholder="Trạng thái"
+                               bindValue="status"
+                               [clearable]="true"
+                               (close)="status.focus(); status.blur()" #status>
+                        <ng-template ng-label-tmp let-item="item">
+                            {{item.desc | translate}}
+                        </ng-template>
+                        <ng-template ng-option-tmp let-item="item">
+                            {{item.desc | translate}}
+                        </ng-template>
+                    </ng-select>
+                </div>
+            </div>
+            <div class="form-group col-sm-4 row p-0 m-0 pt-5">
+                <label class="form-control-label text-sm-right col-sm-4 pl-0 pt-2" for="type">Loại thông báo</label>
+                <div class="col-sm-8 pr-0 pl-0">
+                    <ng-select formControlName="type" id="type"
+                               [items]="service.types"
+                               placeholder="Loại thông báo"
+                               bindValue="type"
+                               [clearable]="true"
+                               (close)="type.focus(); type.blur()" #type>
+                        <ng-template ng-label-tmp let-item="item">
+                            {{item.desc | translate}}
+                        </ng-template>
+                        <ng-template ng-option-tmp let-item="item">
+                            {{item.desc | translate}}
+                        </ng-template>
+                    </ng-select>
+                </div>
+            </div>
+            <div class="form-group col-sm-4 row p-0 m-0 pt-5">
+                <label class="form-control-label text-sm-right col-sm-4 pl-0 pt-2" for="startTime">Ngày bắt đầu</label>
+                <div class="col-sm-8 pr-0 pl-0 input-group">
+                    <input class="form-control" id="startTime"
+                           formControlName="startTime"
+                           [matDatepicker]="picker"
+                           (click)="picker.open()"
+                           (dateChange)="searchFrom.patchValue({startTime: searchFrom.get('startTime').value})"
+                           placeholder="Ngày bắt đầu">
+                    <div class="input-group-prepend sb-cursor-pointer">
+                        <span class="input-group-text p-2 sb-radius-right" (click)="picker.open()">
+                            <i class="flaticon2-calendar-1"></i>
+                        </span>
+                        <mat-datepicker #picker color="warn"></mat-datepicker>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group col-sm-4 row p-0 m-0 pt-5">
+                <label class="form-control-label text-sm-right col-sm-4 pl-0 pt-2" for="endTime">Đến ngày</label>
+                <div class="col-sm-8 pr-0 pl-0 input-group">
+                    <input class="form-control"
+                           formControlName="endTime" id="endTime"
+                           [matDatepicker]="pickerEnd"
+                           (click)="pickerEnd.open()"
+                           (dateChange)="searchFrom.patchValue({endTime: searchFrom.get('endTime').value})"
+                           placeholder="Đến ngày">
+                    <div class="input-group-prepend sb-cursor-pointer">
+                        <span class="input-group-text p-2 sb-radius-right" (click)="pickerEnd.open()">
+                            <i class="flaticon2-calendar-1"></i>
+                        </span>
+                        <mat-datepicker #pickerEnd color="warn"></mat-datepicker>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group col-sm-12 p-0 m-0 pt-5 text-right">
+                <button mat-raised-button color="primary" type="submit">
+                    <span><i class="fas fa-search mr-2 text-light"></i>{{'BUTTON.SEARCH' | translate}}</span>
+                </button>
+                <button style="margin-left: 10px" mat-raised-button color="warn" type="button" class="mr-2"
+                        *cmActionAnyPermission="['ROLE_LEADER_SPECIAL', 'ROLE_LEADER']"
+                        [routerLink]="['/notification', 'add']">
+                    <span><i class="fas fa-plus-circle mr-2 text-light"></i>{{'BUTTON.ADD' | translate}}</span>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive" style="max-height: 60vh;">
+            <table class="table table-bordered" matSort (matSortChange)="sortData($event)">
+                <thead>
+                <tr>
+                    <th class="text-center" scope="col">Tiêu đề</th>
+                    <th class="text-center" scope="col">Loại thông báo</th>
+                    <th class="text-center" scope="col">Nội dung</th>
+                    <th class="text-center" scope="col">Ngày tạo</th>
+                    <th class="text-center" scope="col">Trạng thái</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor = "let notc of Notifications | async">
+                    <td>{{notc.title}}</td>
+                    <td>{{('notification.type.'+notc.type) | translate}}</td>
+                    <td>{{notc.message}}</td>
+                    <td>{{notc.createdDate | date:'dd/MM/yyyy HH:ss:mm'}}</td>
+                    <td>{{('notification.status.'+notc.status) | translate}}</td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                       [pageSize]="this.pageable.size"
+                       [pageIndex]="this.pageable.page"
+                       [length]="this.total | async"
+                       (page)="onChangePage($event)"
+                       showFirstLastButtons="true">
+        </mat-paginator>
+    </div>
+</div>
+

@@ -1,0 +1,317 @@
+<form [formGroup]="form">
+    <div class="card card-custom">
+        <div class="card-header">
+            <div class="card-title">
+                <h3 class="card-label">Thông tin chung của dự án</h3>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="form-group row">
+                <div class="col-12 col-sm-6">
+                    <!--mã dự án-->
+                    <div class="row">
+                        <label class="col-sm-3 col-form-label">Mã dự án</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" formControlName="code"
+                                   (blur)="projectCodeBlur()"/>
+                            <div class="error-msg"
+                                 *ngIf="frm.code.invalid && (frm.code.dirty || frm.code.touched)">
+                                <span *ngIf="frm.code.errors.required">{{'message.required' | translate}}</span>
+                                <span *ngIf="frm.code.errors.duplicate">
+                                    {{'message.exist' | translate:{field: 'Code'} }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--địa phương quản lý-->
+                    <div class="row mt-3">
+                        <label class="col-sm-3 col-form-label">Vùng miền</label>
+                        <div class="col-sm-9">
+                            <ng-select formControlName="area"
+                                       [items]="areas | async"
+                                       placeholder="Khu vực"
+                                       bindLabel="name"
+                                       bindValue="code"
+                                       [clearable]="false"
+                                       (change)="areaChange()"
+                                       (close)="area.focus(); area.blur()" #area>
+                            </ng-select>
+                            <div class="error-msg"
+                                 *ngIf="frm.area.invalid && (frm.area.dirty || frm.area.touched)">
+                                <span *ngIf="frm.area.errors.required">{{'message.required' | translate}}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--Tỉnh/bộ-->
+                    <div class="row mt-3">
+                        <label class="col-sm-3 col-form-label">Tỉnh/Bộ</label>
+                        <div class="col-sm-9">
+                            <ng-select formControlName="province"
+                                       [items]="provinces | async"
+                                       placeholder="Tỉnh bộ"
+                                       bindLabel="name"
+                                       bindValue="code"
+                                       [clearable]="false"
+                                       (change)="provinceChange()"
+                                       [readonly]="frm.area.value === ''"
+                                       (close)="province.focus(); province.blur()" #province>
+                            </ng-select>
+                            <div class="error-msg"
+                                 *ngIf="frm.province.invalid && (frm.province.dirty || frm.province.touched)">
+                                <span *ngIf="frm.province.errors.required">{{'message.required' | translate}}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--Huyện/Sở-->
+                    <div class="row mt-3">
+                        <label class="col-sm-3 col-form-label">Huyện/Sở</label>
+                        <div class="col-sm-9">
+                            <ng-select formControlName="district"
+                                       [items]="districts | async"
+                                       placeholder="Huyện/Sở"
+                                       bindLabel="name"
+                                       bindValue="code"
+                                       [clearable]="false"
+                                       [readonly]="frm.province.value === ''"
+                                       (close)="district.focus(); district.blur()" #district>
+                            </ng-select>
+                            <div class="error-msg"
+                                 *ngIf="frm.district.invalid && (frm.district.dirty || frm.district.touched)">
+                                <span *ngIf="frm.district.errors.required">{{'message.required' | translate}}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--Ghi chú-->
+                    <div class="row mt-3">
+                        <label class="col-sm-3 col-form-label">Ghi chú</label>
+                        <div class="col-sm-9">
+                            <textarea class="form-control" formControlName="note"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-sm-6 mt-2 mt-sm-0">
+                    <!--Tên dự án-->
+                    <div class="row">
+                        <label class="col-sm-3 col-form-label">Tên dự án</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" formControlName="name"/>
+                            <div class="error-msg"
+                                 *ngIf="frm.name.invalid && (frm.name.dirty || frm.name.touched)">
+                                <span *ngIf="frm.name.errors.required">{{'message.required' | translate}}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--Đơn vị-->
+                    <div class="row mt-3">
+                        <label class="col-sm-3 col-form-label">Đơn vị</label>
+                        <div class="col-sm-9">
+                            <ng-select formControlName="unit" id="unit"
+                                       [items]="units | async"
+                                       placeholder="Chọn đơn vị"
+                                       bindLabel="unitName"
+                                       bindValue="unitCode"
+                                       [clearable]="false"
+                                       (change)="unitChange()"
+                                       (close)="unit.focus(); unit.blur()" #unit>
+                            </ng-select>
+                            <div class="error-msg"
+                                 *ngIf="frm.unit.invalid && (frm.unit.dirty || frm.unit.touched)">
+                                <span *ngIf="frm.unit.errors.required">{{'message.required' | translate}}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--PMO-->
+                    <div class="row mt-3">
+                        <label class="col-sm-3 col-form-label">PMO</label>
+                        <div class="col-sm-9">
+                            <ng-select formControlName="pmo" id="pmo"
+                                       [items]="pmos|async"
+                                       placeholder="Chọn quản lý"
+                                       bindLabel="fullName"
+                                       bindValue="id"
+                                       [clearable]="false"
+                                       [readonly]="frm.unit.value === ''"
+                                       (close)="pmo.focus(); pmo.blur()" #pmo>
+                            </ng-select>
+                            <div class="error-msg"
+                                 *ngIf="frm.pmo.invalid && (frm.pmo.dirty || frm.pmo.touched)">
+                                <span *ngIf="frm.pmo.errors.required">{{'message.required' | translate}}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--ngày bắt đầu-->
+                    <div class="row mt-3">
+                        <label class="col-sm-3 col-form-label">Ngày bắt đầu</label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <input class="form-control"
+                                       formControlName="startDate"
+                                       [matDatepicker]="sPicker"
+                                       (click)="sPicker.open()"
+                                       (dateChange)="form.patchValue({startDate: form.get('startDate').value})"
+                                       readonly>
+                                <div class="input-group-prepend sb-cursor-pointer">
+                                <span class="input-group-text p-2 sb-radius-right" (click)="sPicker.open()">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                                    <mat-datepicker #sPicker color="warn"></mat-datepicker>
+                                </div>
+                            </div>
+                            <div class="error-msg"
+                                 *ngIf="frm.startDate.invalid && (frm.startDate.dirty || frm.startDate.touched)">
+                                <span *ngIf="frm.startDate.errors.required">{{'message.required' | translate}}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--Ngày kết thúc-->
+                    <div class="row mt-3">
+                        <label class="col-sm-3 col-form-label">Ngày kết thúc</label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <input class="form-control"
+                                       formControlName="endDate"
+                                       [matDatepicker]="ePicker"
+                                       (click)="ePicker.open()"
+                                       (dateChange)="form.patchValue({endDate: form.get('endDate').value})"
+                                       readonly>
+                                <div class="input-group-prepend sb-cursor-pointer">
+                                <span class="input-group-text p-2 sb-radius-right" (click)="ePicker.open()">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                                    <mat-datepicker #ePicker color="warn"></mat-datepicker>
+                                </div>
+                            </div>
+                            <div class="error-msg"
+                                 *ngIf="frm.endDate.invalid && (frm.endDate.dirty || frm.endDate.touched)">
+                                <span *ngIf="frm.endDate.errors.required">{{'message.required' | translate}}</span>
+                                <span *ngIf="frm.endDate.errors.lt">kkkkkk</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--Trạng thái-->
+                    <div class="row mt-3">
+                        <label class="col-sm-3 col-form-label">Trạng thái</label>
+                        <div class="col-sm-9">
+                            <ng-select formControlName="status" id="status"
+                                       [items]="projectStatus"
+                                       placeholder="Chọn trạng thái"
+                                       bindLabel="name"
+                                       bindValue="code"
+                                       [clearable]="false"
+                                       (close)="status.focus(); status.blur()" #status>
+                            </ng-select>
+                            <div class="error-msg"
+                                 *ngIf="frm.status.invalid && (frm.status.dirty || frm.status.touched)">
+                                <span *ngIf="frm.status.errors.required">{{'message.required' | translate}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-6">
+                <div class="card-header">
+                    <h4 class="card-label">
+                        Danh sách hợp phần
+                        <button class="btn btn-sm btn-success ml-10"
+                          [disabled]="(targetGroups|async).length < 1"
+                          (click)="addTarget()">
+                            <i class="fa fa-plus-circle"></i>
+                        </button>
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th scope="col" style="width: 1%;">STT</th>
+                                <th scope="col">Mã</th>
+                                <th scope="col">Tên</th>
+                                <th scope="col" style="width: 1%;"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let c of targetGroupsSelected | async; let i=index">
+                                <td class="text-center">
+                                    <input class="form-control" [hidden]="true" [value]="c.id">{{i + 1}}
+                                </td>
+                                <td>
+                                    {{c.code}}
+                                </td>
+                                <td>
+                                    {{c.name}}
+                                </td>
+                                <td class="text-center">
+                                    <button class="btn btn-sm btn-danger" (click)="removeTargetGroup(c.code)">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card-header">
+                    <h4 class="card-label">
+                        Danh sách nhân viên
+                        <button class="btn btn-sm btn-success ml-10"
+                             [disabled]="(users|async).length < 1"
+                             (click)="addPmos()">
+                            <i class="fa fa-plus-circle"></i>
+                        </button>
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th scope="col" style="width: 1%;">STT</th>
+                                <th scope="col">Username</th>
+                                <th scope="col">Tên</th>
+                                <th scope="col">Đơn vị</th>
+                                <th scope="col" style="width: 1%;"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let c of usersSelected | async; let i=index">
+                                <td class="text-center">
+                                    <input class="form-control" [hidden]="true" [value]="c.id">{{i + 1}}
+                                </td>
+                                <td>{{c.login}}</td>
+                                <td>{{c.fullName}}</td>
+                                <td>{{c.unitCode}}</td>
+                                <td class="text-center">
+                                    <button class="btn btn-sm btn-danger" (click)="removePmo(c.id)">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row ml-10">
+            <button type="submit" (click)="previousState()" class="btn btn-default">Quay lại</button>
+            <button type="button" style="margin-left: 10px" class="btn btn-success" (click)="save()">
+                <i class="fa fa-save"></i> Lưu
+            </button>
+        </div>
+    </div>
+</form>

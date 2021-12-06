@@ -1,0 +1,39 @@
+entity Project {
+    id Long,
+    code String maxlength(100) unique required,
+    name String maxlength(255),
+    pmoUser Long,
+    localManager String maxlength(255),
+    unit String maxlength(255) required,
+    startDate Instant required,
+    endDate Instant required,
+    status ProjectStatusEnum required,
+    note String,
+    createdAt Instant,
+    createdBy String,
+    updatedAt Instant,
+    updatedBy String
+}
+
+entity TargetGroup {
+    id Long,
+    projectId Long required,
+    code String maxlength(100) required,
+    name String maxlength(255) required,
+    createdAt Instant,
+    createdBy String,
+    updatedAt Instant,
+    updatedBy String
+}
+
+enum ProjectStatusEnum {
+	ACTIVE, INACTIVE
+}
+
+
+// Set pagination options
+paginate Project with pagination
+
+service * with serviceClass
+
+dto * with mapstruct

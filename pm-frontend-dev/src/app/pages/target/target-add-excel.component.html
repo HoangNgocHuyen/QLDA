@@ -1,0 +1,111 @@
+<div class="card card-custom">
+    <form name="editForm" role="form" enctype="multipart/form-data" novalidate (ngSubmit)="save()" [formGroup]="importForm">
+    <div class="card-body row">
+        <div class="form-group col-sm-12">
+            <h2>Thêm mới mục tiêu theo file</h2>
+        </div>
+
+        <div class="form-group col-sm-6">
+            <label class="form-control-label" for="file">Chọn file tải lên (<a href="/assets/template/template-import-target.xlsx">File mẫu</a>)</label>
+            <div class="form-group row m-0 p-0">
+                <div class="col-10 m-0 p-0">
+                    <input type="file" class="form-control" id="file" formControlName="file"
+                           #inputFile (click)="inputFile.value = null" (change)="chooseFile($event)"/>
+                </div>
+            </div>
+            <div class="sb-error"
+                 *ngIf="frm.file.invalid && (frm.file.dirty || frm.file.touched)">
+                <span *ngIf="frm.file.errors.required">Vui lòng chọn file tải lên</span>
+            </div>
+        </div>
+
+        <div class="form-group col-12">
+            <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+                Quay lại
+            </button>
+            <button style="margin-left: 10px" type="submit" id="save-entity" [disabled]="importForm.invalid || isSaving" class="btn btn-primary">
+                Tải lên
+            </button>
+        </div>
+    </div>
+    </form>
+</div>
+<div class="card" *ngIf="(targets | async)?.length > 0">
+    <div class="card-body">
+        <div class="form-group col-sm-12">
+            <h2>Thông tin file tải lên</h2>
+        </div>
+        <div class="table-responsive" style="max-height: 60vh;">
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th class="text-center" scope="col">Mã mục tiêu</th>
+                    <th class="text-center" scope="col">Tên mục tiêu</th>
+                    <th class="text-center" scope="col">Dự án</th>
+                    <th class="text-center" scope="col">Hợp phần</th>
+                    <th class="text-center" scope="col">Đơn vị</th>
+                    <th class="text-center" scope="col">Ngày bắt đầu</th>
+                    <th class="text-center" scope="col">Ngày kết thúc</th>
+                    <th class="text-center" scope="col">Số ngày</th>
+                    <th class="text-center" scope="col">Ngày làm việc</th>
+                    <th class="text-center" scope="col">Số cuộc họp</th>
+                    <th class="text-center" scope="col">Tiến độ (%)</th>
+                    <th class="text-center" scope="col">Mô tả</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor = "let target of targets | async">
+                    <td class="text-center">
+                        <div>{{target.code}}</div>
+                        <div class="sb-color-red" *ngIf="target?.errors?.code">{{target.errors.code}}</div>
+                    </td>
+                    <td>
+                        <div>{{target.title}}</div>
+                        <div class="sb-color-red" *ngIf="target?.errors?.title">{{target.errors.title}}</div>
+                    </td>
+                    <td>
+                        <div>{{target.projectCode}}</div>
+                        <div class="sb-color-red" *ngIf="target?.errors?.projectCode">{{target.errors.projectCode}}</div>
+                    </td>
+                    <td>
+                        <div>{{target.groupCode}}</div>
+                        <div class="sb-color-red" *ngIf="target?.errors?.groupCode">{{target.errors.groupCode}}</div>
+                    </td>
+                    <td>
+                        <div>{{target.unitCode}}</div>
+                        <div class="sb-color-red" *ngIf="target?.errors?.unitCode">{{target.errors.unitCode}}</div>
+                    </td>
+                    <td>
+                        <div>{{target.startTime | date:'dd/MM/yyyy'}}</div>
+                        <div class="sb-color-red" *ngIf="target?.errors?.startTime">{{target.errors.startTime}}</div>
+                    </td>
+                    <td>
+                        <div>{{target.endTime | date:'dd/MM/yyyy'}}</div>
+                        <div class="sb-color-red" *ngIf="target?.errors?.endTime">{{target.errors.endTime}}</div>
+                    </td>
+                    <td>
+                        <div>{{target.numberDay}}</div>
+                        <div class="sb-color-red" *ngIf="target?.errors?.numberDay">{{target.errors.numberDay}}</div>
+                    </td>
+                    <td>
+                        <div>{{target.numberDayWorking}}</div>
+                        <div class="sb-color-red" *ngIf="target?.errors?.numberDayWorking">{{target.errors.numberDayWorking}}</div>
+                    </td>
+                    <td>
+                        <div>{{target.numberMeeting}}</div>
+                        <div class="sb-color-red" *ngIf="target?.errors?.numberMeeting">{{target.errors.numberMeeting}}</div>
+                    </td>
+                    <td>
+                        <div>{{target.donePercent}}</div>
+                        <div class="sb-color-red" *ngIf="target?.errors?.donePercent">{{target.errors.donePercent}}</div>
+                    </td>
+                    <td>
+                        <div>{{target.description}}</div>
+                        <div class="sb-color-red" *ngIf="target?.errors?.description">{{target.errors.description}}</div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,99 @@
+
+entity Schedules {
+    id Long
+    taskId Long
+	title String
+    address String
+    assigneeId Long
+    method String
+    description String
+    startTime Instant
+    endTime Instant
+    estimatedTime Double
+    spentTime Double
+    priority Integer
+    role String
+    status ScheduleStatusEnum
+    donePercent Double
+    createdAt Instant
+    createdBy String
+    closedAt Instant
+    closedBy String
+    document String
+    reportDoc String
+    secretaryId Long
+    ownerId Long
+}
+
+entity Tasks {
+    id Long
+    jobId Long
+	title String
+	description String
+    assigneeId Long
+    startTime Instant
+    endTime Instant
+    estimatedTime Double
+    spentTime Double
+    priority Integer
+    status TaskStatusEnum
+    donePercent Double
+    createdAt Instant
+    createdBy String
+    closedAt Instant
+    closedBy String
+}
+
+entity Jobs {
+	id Long
+	title String
+	description String
+    assigneeId Long
+    startTime Instant
+    endTime Instant
+    estimatedTime Double
+    spentTime Double
+    priority Integer
+    status JobStatusEnum
+    donePercent Double
+    createdAt Instant
+    createdBy String
+    closedAt Instant
+    closedBy String
+}
+
+enum GenderEnum {
+	MALE, FEMALE, OTHER
+}
+
+enum UserStatusEnum {
+	ACTIVE, INACTIVE, SUSSPENED, LOCKED
+}
+
+enum PositionEnum {
+	DIRECTOR, DEPUTY_DIRECTOR, DEPARTMENT, DEPUTY_DEPARTMENT, LEADER, EMPLOYEE
+}
+
+enum DepartmentEnum {
+	TECH, ACCOUNTANT, SUPPORT, OPERATION
+}
+
+enum JobStatusEnum {
+	OPEN, IN_PROGRESS, RESOLVED, REJECTED, PENDING, CLOSED, FEED_BACK
+}
+
+enum TaskStatusEnum {
+	OPEN, IN_PROGRESS, RESOLVED, REJECTED, PENDING, CLOSED, FEED_BACK
+}
+
+enum ScheduleStatusEnum {
+	OPEN, IN_PROGRESS, RESOLVED, REJECTED, PENDING, CLOSED, FEED_BACK
+}
+
+// Set pagination options
+paginate Tasks, Jobs, Schedules with pagination
+
+service * with serviceClass
+
+dto * with mapstruct
+

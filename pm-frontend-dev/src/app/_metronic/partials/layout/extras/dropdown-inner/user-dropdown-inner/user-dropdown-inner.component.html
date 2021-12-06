@@ -1,0 +1,47 @@
+<ng-container *ngIf="user$ | async as _user">
+    <ng-container *ngIf="extrasUserDropdownStyle === 'light'">
+        <!--begin::Header-->
+        <div class="d-flex align-items-center p-8 rounded-top">
+            <div class="text-dark m-0 flex-grow-1 mr-3 font-size-h5">
+                {{ _user.fullName }}
+            </div>
+        </div>
+        <div class="separator separator-solid"></div>
+        <!--end::Header-->
+    </ng-container>
+
+    <ng-container *ngIf="extrasUserDropdownStyle === 'dark'">
+        <!--begin::Header-->
+        <div class="align-items-center justify-content-between flex-wrap p-8 bgi-size-cover bgi-no-repeat rounded-top"
+             style="background-image: url('./assets/media/bg/demo-7.jpg'); background-size: cover">
+            <div class="d-flex align-items-center mr-2">
+                <!--begin::Symbol-->
+                <div class="symbol bg-white-o-15 mr-3">
+                    <span class="symbol-label text-success font-weight-bold font-size-h4">{{ _user.fullName | firstLetter }}</span>
+                </div>
+                <!--end::Symbol-->
+
+                <!--begin::Text-->
+                <div class="text-white m-0 flex-grow-1 mr-3 font-size-h5">{{ _user.fullName }}</div>
+                <!--end::Text-->
+            </div>
+
+            <div class="w-100 mt-5" style="background-color: white; height: 1px"></div>
+
+            <!--begin::Nav-->
+            <div class="mt-5 row p-0 m-0">
+                <div class="col-7 text-left">
+                    <button type="button" (click)="changePassword()" class="btn btn-pill btn-outline-white font-weight-bold opacity-90 w-100">
+                        {{'AUTH.CHANGE_PASSWORD.BUTTON' | translate}}
+                    </button>
+                </div>
+                <div class="col-5 text-right">
+                    <button type="submit" id="kt_login_signin_submit" (click)="logout()" class="btn btn-pill btn-outline-white font-weight-bold opacity-90 w-100">
+                        {{'AUTH.LOGOUT.BUTTON' | translate}}
+                    </button>
+                </div>
+            </div>
+            <!--end::Nav-->
+        </div>
+    </ng-container>
+</ng-container>

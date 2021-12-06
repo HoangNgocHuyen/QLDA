@@ -1,0 +1,136 @@
+<div class="card card-custom">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+
+    <div class="card-body row">
+        <div class="form-group col-sm-12">
+            <h2 *ngIf="!editForm.get('id')!.value">Thêm mới mục tiêu</h2>
+            <h2 *ngIf="editForm.get('id')!.value">Cập nhật mục tiêu</h2>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="form-control-label" for="title">Tên thông báo</label>
+            <input type="text" class="form-control" name="title" id="title"
+                   formControlName="title"/>
+            <div class="error-msg" *ngIf="frm.title.invalid && (frm.title.dirty || frm.title.touched)">
+                <span *ngIf="frm.title.errors.required">Trường thông tin bắt buộc nhập</span>
+            </div>
+        </div>
+
+        <div class="form-group col-sm-6">
+            <label class="form-control-label" for="type">Loại thông báo</label>
+            <ng-select formControlName="type" id="type"
+                       [items]="service.types"
+                       placeholder="Loại thông báo"
+                       bindValue="type"
+                       [clearable]="false"
+                       (change)="typeChange()"
+                       (close)="type.focus(); type.blur()" #type>
+                <ng-template ng-label-tmp let-item="item">
+                    {{item.desc | translate}}
+                </ng-template>
+                <ng-template ng-option-tmp let-item="item">
+                    {{item.desc | translate}}
+                </ng-template>
+            </ng-select>
+            <div class="error-msg" *ngIf="frm.type.invalid && (frm.type.dirty || frm.type.touched)">
+                <span *ngIf="frm.type.errors.required">Trường thông tin bắt buộc chọn</span>
+            </div>
+        </div>
+
+        <div class="form-group col-sm-6" [hidden]="!showUsername">
+            <label class="form-control-label" for="username">Tài khoản (username)</label>
+            <input type="text" class="form-control" name="username" id="username"
+                   formControlName="username"/>
+            <div class="error-msg" *ngIf="frm.username.invalid && (frm.username.dirty || frm.username.touched)">
+                <span *ngIf="frm.username.errors.required">Trường thông tin bắt buộc chọn</span>
+            </div>
+        </div>
+
+        <div class="form-group col-sm-6" [hidden]="!showListUsername">
+            <label class="form-control-label" for="listUsername">Nhiều tài khoản (username;username1)</label>
+            <input type="text" class="form-control" name="listUsername" id="listUsername"
+                   formControlName="listUsername"/>
+            <div class="error-msg" *ngIf="frm.listUsername.invalid && (frm.listUsername.dirty || frm.listUsername.touched)">
+                <span *ngIf="frm.listUsername.errors.required">Trường thông tin bắt buộc chọn</span>
+            </div>
+        </div>
+
+        <div class="form-group col-sm-6" [hidden]="!showProject">
+            <label class="form-control-label" for="projectCode">Dự án</label>
+            <ng-select formControlName="projectCode" id="projectCode"
+                       [items]="Projects | async"
+                       placeholder="Dự án"
+                       bindValue="projectCode"
+                       [clearable]="false"
+                       (close)="projectCode.focus(); projectCode.blur()" #projectCode>
+                <ng-template ng-label-tmp let-item="item">
+                    {{item.code}}
+                </ng-template>
+                <ng-template ng-option-tmp let-item="item">
+                    {{item.name}}
+                </ng-template>
+            </ng-select>
+            <div class="error-msg" *ngIf="frm.projectCode.invalid && (frm.projectCode.dirty || frm.projectCode.touched)">
+                <span *ngIf="frm.projectCode.errors.required">Trường thông tin bắt buộc chọn</span>
+            </div>
+        </div>
+
+        <div class="form-group col-sm-6" [hidden]="!showUnit">
+            <label class="form-control-label" for="unitCode">Đơn vị</label>
+            <ng-select formControlName="unitCode" id="unitCode"
+                       [items]="Units | async"
+                       placeholder="Đơn vị"
+                       bindValue="unitCode"
+                       [clearable]="false"
+                       (close)="unitCode.focus(); unitCode.blur()" #unitCode>
+                <ng-template ng-label-tmp let-item="item">
+                    {{item.unitName | translate}}
+                </ng-template>
+                <ng-template ng-option-tmp let-item="item">
+                    {{item.unitName | translate}}
+                </ng-template>
+            </ng-select>
+            <div class="error-msg" *ngIf="frm.unitCode.invalid && (frm.unitCode.dirty || frm.unitCode.touched)">
+                <span *ngIf="frm.unitCode.errors.required">Trường thông tin bắt buộc chọn</span>
+            </div>
+        </div>
+        <div class="form-group col-sm-6" [hidden]="!showTask">
+            <label class="form-control-label" for="taskCode">Task/Công việc</label>
+            <ng-select formControlName="taskCode" id="taskCode"
+                       [items]="Tasks | async"
+                       placeholder="Task/Công việc"
+                       bindValue="unitCode"
+                       [clearable]="false"
+                       (close)="taskCode.focus(); taskCode.blur()" #taskCode>
+                <ng-template ng-label-tmp let-item="item">
+                    {{item.name | translate}}
+                </ng-template>
+                <ng-template ng-option-tmp let-item="item">
+                    {{item.name | translate}}
+                </ng-template>
+            </ng-select>
+            <div class="error-msg" *ngIf="frm.taskCode.invalid && (frm.taskCode.dirty || frm.taskCode.touched)">
+                <span *ngIf="frm.taskCode.errors.required">Trường thông tin bắt buộc chọn</span>
+            </div>
+        </div>
+
+        <div class="form-group col-sm-12">
+            <label class="form-control-label" for="message">Nội dung</label>
+            <textarea type="text" class="form-control" name="message" id="message" rows="5"
+                      formControlName="message"></textarea>
+            <div class="error-msg" *ngIf="frm.message.invalid && (frm.message.dirty || frm.message.touched)">
+                <span *ngIf="frm.message.errors.required">Trường thông tin bắt buộc nhập</span>
+            </div>
+        </div>
+
+
+        <div class="formGroup">
+            <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+                Quay lại
+            </button>
+            <button style="margin-left: 10px" type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                Lưu
+            </button>
+        </div>
+    </div>
+    </form>
+</div>
