@@ -13,4 +13,4 @@ Hoàng Thị Ngọc Huyền
 [https://p578ot.axshare.com/#id=osjt15&p=createproject&g=1](http://https://p578ot.axshare.com/#id=osjt15&p=createproject&g=1)
 ## Website quản lý dự án
 Dữ liệu hình ảnh  
-[https://github.com/HoangNgocHuyen/QLDA/issues/1](http://https://github.com/HoangNgocHuyen/QLDA/issues/1)
+[https://docs.google.com/document/d/136kJcndt3ICu7V7ngey20uwLG9IeZkZ-6uIT4W4_QvI/edit](http:https://docs.google.com/document/d/136kJcndt3ICu7V7ngey20uwLG9IeZkZ-6uIT4W4_QvI/edit)
