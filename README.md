@@ -6,7 +6,7 @@ Nguyễn Xuân Trường
 ## Người thực hiện
 Hoàng Thị Ngọc Huyền
 ## pm_backend
-Ứng dụng được tạo bằng JHipster 7.0.1, có thể tìm tài liệu tại [https://www.jhipster.tech/documentation-archive/v7.0.1/](http://https://www.jhipster.tech/documentation-archive/v7.0.1/)
+Ứng dụng được tạo bằng JHipster 7.0.1, có thể tìm tài liệu tại [https://www.jhipster.tech/documentation-archive/v7.0.1.](http://https://www.jhipster.tech/documentation-archive/v7.0.1.)
 ## pm_frontend
 Được sử dụng bởi Angular CLI
 ## Link thiết kế
